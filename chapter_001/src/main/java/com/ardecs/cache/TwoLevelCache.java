@@ -1,39 +1,62 @@
 package com.ardecs.cache;
 
+import com.ardecs.strategy.*;
+
 /**
  * @author Marat Yanbaev (yanbaevms@gmail.com)
  * @since 08.03.2019
  */
-
-import com.ardecs.strategy.*;
 
 public class TwoLevelCache<K, V> implements Cache<K, V> {
     private final MemoryCache<K, V> firstLevelCache;
     private final FileSystemCache<K, V> secondLevelCache;
     private final CacheStrategy<K> strategy;
 
-    public TwoLevelCache(final int memoryCapacity, final int fileCapacity, final StrategyType strategyType) {
+    TwoLevelCache(final int memoryCapacity, final int fileCapacity, final StrategyType strategyType) {
         this.firstLevelCache = new MemoryCache<>(memoryCapacity);
         this.secondLevelCache = new FileSystemCache<>(fileCapacity);
         this.strategy = getStrategy(strategyType);
     }
 
-    public TwoLevelCache(final int memoryCapacity, final int fileCapacity) {
+    TwoLevelCache(final int memoryCapacity, final int fileCapacity) {
         this.firstLevelCache = new MemoryCache<>(memoryCapacity);
         this.secondLevelCache = new FileSystemCache<>(fileCapacity);
         this.strategy = getStrategy(StrategyType.LFU);
     }
 
+    MemoryCache<K, V> getFirstLevelCache() {
+        return firstLevelCache;
+    }
+
+    FileSystemCache<K, V> getSecondLevelCache() {
+        return secondLevelCache;
+    }
+
+    CacheStrategy<K> getStrategy() {
+        return strategy;
+    }
+
+    /**
+     * LRU (Least Recently Used) — не использованный дольше всех вылетает из кеша
+     * MRU (Most Recently Used) — последний использованный вылетает из кеша
+     * LFU (Least Frequently Used) — реже всего использованный вылетает из кеша
+     * @param strategyType strategy to remove excess object from cache
+     * @return a type strategy
+     */
     private CacheStrategy<K> getStrategy(StrategyType strategyType) {
+        CacheStrategy<K> type = null;
         switch (strategyType) {
             case LRU:
-                return new LRUStrategy<>();
+                type = new LRUStrategy<>();
+                break;
             case MRU:
-                return new MRUStrategy<>();
+                type = new MRUStrategy<>();
+                break;
             case LFU:
-            default:
-                return new LFUStrategy<>();
+                default:
+                type = new LFUStrategy<>();
         }
+        return type;
     }
 
     @Override
