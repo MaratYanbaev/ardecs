@@ -5,45 +5,63 @@ package com.ardecs.strategy;
  * @since 08.03.2019
  */
 
-import java.util.Map;
+import java.util.HashMap;
 import java.util.TreeMap;
 
 public abstract class CacheStrategy<K> {
-    private final Map<K, Long> objectsStorage;
-    private final TreeMap<K, Long> sortedObjectsStorage;
+    /**
+     * Данная коллекция необходима
+     * для обновления значения Long
+     * при просмотре объекта из хэш.
+     */
+    private HashMap<K, Long> storageOfLong;
+
+    /**
+     * По значению определяющие приоритет
+     * удаления, получаем соответствующий ключ,
+     * который отображает удаляемый объект из хэш
+     */
+    private TreeMap<Long, K> storageOfKey;
 
     CacheStrategy() {
-        this.objectsStorage = new TreeMap<>();
-        this.sortedObjectsStorage = new TreeMap<>(new ComparatorImpl<>(objectsStorage));
+        storageOfKey = new TreeMap<>();
+        storageOfLong = new HashMap<>();
     }
 
-    Map<K, Long> getObjectsStorage() {
-        return objectsStorage;
+    /**
+     * Метод удаляет ключ из стратегии
+     * @return - ключ.
+     */
+    public abstract K extractKey();
+
+    /**
+     *
+     * @param key - ключ
+     */
+    public void updateLongOfKey(K key) {
+        long newLong = System.nanoTime();
+        Long oldLong = getStorageOfLong().replace(key, newLong);
+        getStorageOfKey().remove(oldLong);
+        getStorageOfKey().put(newLong, key);
     }
 
-    TreeMap<K, Long> getSortedObjectsStorage() {
-        return sortedObjectsStorage;
-    }
-
-    public abstract void putObject(K key);
-
-    public void removeObject(K key) {
-        if (isObjectPresent(key)) {
-            objectsStorage.remove(key);
-        }
-    }
-
-    public boolean isObjectPresent(K key) {
-        return objectsStorage.containsKey(key);
-    }
-
-    public K getReplacedKey() {
-        sortedObjectsStorage.putAll(objectsStorage);
-        return sortedObjectsStorage.firstKey();
+    public void putKey(K key) {
+        Long newLong = System.nanoTime();
+        getStorageOfLong().put(key, newLong);
+        getStorageOfKey().put(newLong, key);
     }
 
     public void clear() {
-        objectsStorage.clear();
+        storageOfKey.clear();
+        storageOfLong.clear();
+    }
+
+    public HashMap<K, Long> getStorageOfLong() {
+        return storageOfLong;
+    }
+
+    public TreeMap<Long, K> getStorageOfKey() {
+        return storageOfKey;
     }
 }
 
