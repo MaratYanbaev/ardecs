@@ -1,14 +1,11 @@
 package com.ardecs.cache;
 
-import com.ardecs.strategy.CacheStrategy;
-
-import java.io.Serializable;
+import com.ardecs.strategy.*;
 
 interface Cache<K, V> {
-    boolean increaseCapacity(int capacity);
 
     /**
-     *
+     * Хранение value = null не допускается.
      * @param key ключ
      * @param value значение/объект
      * @return null, если кэш не переполнен, иначе
@@ -23,8 +20,6 @@ interface Cache<K, V> {
 
     boolean isPresent(K key);
 
-    void clearCache();
-
     boolean hasEmptyPlace();
 
     /**
@@ -34,15 +29,30 @@ interface Cache<K, V> {
      * Ключ при этом удаляется из стратегии.
      * @return - ключ.
      */
-    K removeFromStrategy();
+    K extractFromStrategy();
+
+    void clearCache();
+
+    default CacheStrategy<K> getStrategy(StrategyType strategyType) {
+        CacheStrategy<K> fileStrategy = null;
+        switch (strategyType) {
+            case LRU:
+                fileStrategy = new LRUStrategy<>();
+                break;
+            case MRU:
+                fileStrategy = new MRUStrategy<>();
+                break;
+            case LFU:
+                fileStrategy = new LFUStrategy<>();
+                break;
+            default:
+        }
+        return fileStrategy;
+    }
+
+    boolean increaseCapacity(int capacity);
 
     CacheStrategy<K> getStrategy();
-
-    /**
-     * @return возвращает колличество элементов
-     * сохраненых в кэш
-     */
-    int getCacheSize();
 
     /**
      * Метод позволяет изменить стратегию удаления
@@ -51,5 +61,23 @@ interface Cache<K, V> {
      * @param type - тип стратегии.
      * @return true, если стратегия изменина, иначе false
      */
-    boolean changeStrategy(CacheStrategy<K> type);
+    boolean changeStrategy(StrategyType type);
+
+    /**
+     * @return возвращает колличество элементов
+     * сохраненых в кэш
+     */
+    int getCacheSize();
+
+    int getCapacity();
+
+    /**
+     * Указать новый путь для записи файлов
+     * возможно только, если кэш пустой.
+     * @param path - путь
+     * @return true, если кэш пустой, иначе false
+     */
+    default boolean setPath(String path) {
+        return false;
+    }
 }

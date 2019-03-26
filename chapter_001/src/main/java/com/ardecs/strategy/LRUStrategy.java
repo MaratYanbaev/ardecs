@@ -17,4 +17,9 @@ public class LRUStrategy<K> extends CacheStrategy<K> {
         getStorageOfLong().remove(key);
         return key;
     }
+
+    @Override
+    public void removeFromStrategy(K key) {
+
+    }
 }

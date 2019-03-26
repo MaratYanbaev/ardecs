@@ -30,6 +30,11 @@ public class LFUStrategy<K> extends CacheStrategy<K> {
     }
 
     @Override
+    public void removeFromStrategy(K key) {
+
+    }
+
+    @Override
     public void updateLongOfKey(K key) {
         Long oldLong = getStorageOfLong().get(key);
         Long updateLong = oldLong + 1;
@@ -49,6 +54,8 @@ public class LFUStrategy<K> extends CacheStrategy<K> {
                     getStorageOfKey().put(updateLong, key);
                 }
             }
+        } else if (!(getStorageOfKey().containsKey(updateLong))) {
+            getStorageOfKey().put(updateLong, key);
         }
     }
 

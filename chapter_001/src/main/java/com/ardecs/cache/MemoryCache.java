@@ -19,18 +19,21 @@ class MemoryCache<K, V> implements Cache<K, V> {
         this.memoryStorage = new HashMap<>(this.capacity);
     }
 
-    public MemoryCache(CacheStrategy<K> memoryStrategy, int capacity) {
-        this.memoryStrategy = memoryStrategy;
+    public MemoryCache(StrategyType memoryStrategy, int capacity) {
+        this.memoryStrategy = getStrategy(memoryStrategy);
         this.capacity = capacity;
         this.memoryStorage = new HashMap<>(capacity);
     }
 
     @Override
-    public Object[] putToCache(K key, V value) {
+    public Object[] putToCache(K key, V value) throws NullPointerException {
+        if ((value == null) && (key == null)) {
+            throw new NullPointerException("value and key can't be null");
+        }
         Object[] o = null;
         if (!(hasEmptyPlace())) {
             o = new Object[2];
-            K k = removeFromStrategy();
+            K k = extractFromStrategy();
             o[0] = k;
             V v = removeFromCache(k);
             o[1] = v;
@@ -55,12 +58,27 @@ class MemoryCache<K, V> implements Cache<K, V> {
 
     @Override
     public V removeFromCache(K key) {
-        return memoryStorage.remove(key);
+        V value = null;
+        if (isPresent(key)) {
+            memoryStrategy.removeFromStrategy(key);
+            value = memoryStorage.remove(key);
+        }
+        return value;
     }
 
     @Override
     public boolean isPresent(K key) {
         return memoryStorage.containsKey(key);
+    }
+
+    @Override
+    public boolean hasEmptyPlace() {
+        return capacity > memoryStorage.size();
+    }
+
+    @Override
+    public K extractFromStrategy() {
+        return memoryStrategy.extractKey();
     }
 
     @Override
@@ -70,31 +88,12 @@ class MemoryCache<K, V> implements Cache<K, V> {
     }
 
     @Override
-    public boolean hasEmptyPlace() {
-        return capacity > memoryStorage.size();
-    }
-
-    @Override
-    public K removeFromStrategy() {
-        return memoryStrategy.extractKey();
-    }
-
-    @Override
-    public boolean changeStrategy(CacheStrategy<K> type) {
+    public boolean changeStrategy(StrategyType type) {
         if (this.memoryStorage.size() == 0) {
-            this.memoryStrategy = type;
+            this.memoryStrategy = getStrategy(type);
             return true;
         }
         return false;
-    }
-
-    public int getCapacity() {
-        return this.capacity;
-    }
-
-    @Override
-    public int getCacheSize() {
-        return memoryStorage.size();
     }
 
     @Override
@@ -104,6 +103,16 @@ class MemoryCache<K, V> implements Cache<K, V> {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public int getCapacity() {
+        return this.capacity;
+    }
+
+    @Override
+    public int getCacheSize() {
+        return memoryStorage.size();
     }
 
     @Override

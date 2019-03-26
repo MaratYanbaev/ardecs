@@ -30,9 +30,12 @@ public abstract class CacheStrategy<K> {
 
     /**
      * Метод удаляет ключ из стратегии
+     * согласно логики.
      * @return - ключ.
      */
     public abstract K extractKey();
+
+    public abstract void removeFromStrategy(K key);
 
     /**
      *

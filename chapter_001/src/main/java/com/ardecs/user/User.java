@@ -1,4 +1,4 @@
-package com.ardecs.cache;
+package com.ardecs.user;
 
 import java.io.Serializable;
 

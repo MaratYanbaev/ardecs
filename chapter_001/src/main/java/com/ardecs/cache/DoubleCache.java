@@ -8,148 +8,104 @@ import java.io.Serializable;
  * @author Marat Yanbaev (yanbaevms@gmail.com)
  * @since 12.03.2019
  */
-class DoubleCache<K, V extends Serializable> {
+class DoubleCache<K, V extends Serializable> implements Cache<K, V> {
     private MemoryCache<K, V> memoryCache;
     private FileCache<K, V> fileCache;
-    private StrategyType strategyType = StrategyType.MRU;
 
     public DoubleCache() {
         memoryCache = new MemoryCache<>();
+        fileCache = new FileCache<>();
     }
 
-    /**
-     * @param key ключ
-     * @param value значение
-     */
-    public void putToCache(K key, V value) {
+    public DoubleCache(String path) {
+        memoryCache = new MemoryCache<>();
+        fileCache = new FileCache<>(path);
+    }
+
+    public DoubleCache(StrategyType type, int capacity, String path) {
+        memoryCache = new MemoryCache<>(type, capacity);
+        fileCache = new FileCache<>(type, capacity, path);
+    }
+
+    @Override
+    public Object[] putToCache(K key, V value) {
         Object[] i = memoryCache.putToCache(key, value);
-        if (i != null && fileCache != null) {
-            fileCache.putToCache((K) i[0], (V) i[1]);
+        if (i != null) {
+            i = fileCache.putToCache((K) i[0], (V) i[1]);
         }
+        return i;
     }
 
-    /**
-     * @param key ключ
-     * @return отображение заданного ключа,
-     * иначе null.
-     */
-    public V getValue(K key) {
+
+    @Override
+    public V getFromCache(K key) {
         V v = null;
         if (memoryCache.isPresent(key)) {
             v = memoryCache.getFromCache(key);
-        } else if (fileCache != null && fileCache.isPresent(key)) {
+        } else if (fileCache.isPresent(key)) {
             v = fileCache.getFromCache(key);
         }
         return v;
     }
 
-    public void clearCache() {
-        memoryCache.clearCache();
-        if (fileCache != null) {
-            fileCache.clearCache();
-        }
+    @Override
+    public V removeFromCache(K key) {
+        return null;
     }
 
-    public static class CacheBuilder<K, V extends Serializable> {
+    @Override
+    public boolean isPresent(K key) {
+        return memoryCache.isPresent(key) || fileCache.isPresent(key);
+    }
 
-        private DoubleCache<K, V> doubleCache;
+    @Override
+    public boolean hasEmptyPlace() {
+        return false;
+    }
 
-        public CacheBuilder() {
-            doubleCache = new DoubleCache<>();
+    @Override
+    public K extractFromStrategy() {
+        return null;
+    }
+
+    @Override
+    public void clearCache() {
+        memoryCache.clearCache();
+        fileCache.clearCache();
+    }
+
+    @Override
+    public boolean changeStrategy(StrategyType type) {
+        if (memoryCache.changeStrategy(type)) {
+            fileCache.changeStrategy(type);
+            return true;
         }
+        return false;
+    }
 
-        public CacheBuilder(DoubleCache<K, V> doubleCache) {
-            this.doubleCache = doubleCache;
-        }
+    @Override
+    public boolean increaseCapacity(int capacity) {
+        return memoryCache.increaseCapacity(capacity)
+                && fileCache.increaseCapacity(capacity);
+    }
 
-        /**
-         * Добавление второго уровня кэш.
-         * @return ссылку на объект класса CacheBuilder
-         */
-        public CacheBuilder addFileCache(String path) {
-            if (doubleCache.fileCache == null) {
-                doubleCache.fileCache = new FileCache<>(getStrategy(doubleCache.strategyType), path);
-            }
-            return this;
-        }
+    @Override
+    public int getCapacity() {
+        return memoryCache.getCapacity() + fileCache.getCapacity();
+    }
 
-        /**
-         * Удаление кэш второго уровня.
-         * При этом также удаляются все элементы.
-         * @return ссылку на объект класса CacheBuilder
-         */
-        public CacheBuilder removeFileCache() {
-            if (doubleCache.fileCache != null) {
-                doubleCache.fileCache.clearCache();
-                doubleCache.fileCache = null;
-            }
-            return this;
-        }
+    @Override
+    public int getCacheSize() {
+        return memoryCache.getCacheSize() + fileCache.getCacheSize();
+    }
 
-        /**
-         * @param strategyType - тип стратегии, которая будет использоваться
-         *            вместо дефолтной реализации.
-         * Изменить стратегию возможно, если кэш первого и/или второго уровня
-         *             не имеют элементов.
-         * @return ссылку на объект класса CacheBuilder
-         */
-        public CacheBuilder changeStrategy(StrategyType strategyType) {
-            if (doubleCache.memoryCache.getCacheSize() == 0) {
-                if (doubleCache.fileCache != null && doubleCache.fileCache.getCacheSize() == 0) {
-                    doubleCache.fileCache.changeStrategy(getStrategy(strategyType));
-                    doubleCache.memoryCache.changeStrategy(getStrategy(strategyType));
-                    doubleCache.strategyType = strategyType;
-                } else {
-                    doubleCache.memoryCache.changeStrategy(getStrategy(strategyType));
-                    doubleCache.strategyType = strategyType;
-                }
-            }
-            return this;
-        }
+    @Override
+    public CacheStrategy<K> getStrategy() {
+        return memoryCache.getStrategy();
+    }
 
-        private CacheStrategy<K> getStrategy(StrategyType strategyType) {
-            CacheStrategy<K> fileStrategy = null;
-            switch (strategyType) {
-                case LRU:
-                    fileStrategy = new LRUStrategy<>();
-                    break;
-                case MRU:
-                    fileStrategy = new MRUStrategy<>();
-                    break;
-                case LFU:
-                    fileStrategy = new LFUStrategy<>();
-                    break;
-                    default:
-            }
-            return fileStrategy;
-        }
-
-
-        /**
-         * Размер кэш можно только увеличить.
-         * Размер по умолчанию 5 элементов
-         * @param capacity размер кэш первого уровня.
-         * @return ссылку на объект класса CacheBuilder
-         */
-        public CacheBuilder upMemoryCapacity(int capacity) {
-            if (capacity > doubleCache.memoryCache.getCapacity()) {
-                doubleCache.memoryCache.increaseCapacity(capacity);
-            }
-            return this;
-        }
-
-        /**
-         * Размер кэш можно только увеличить.
-         * Размер по умолчанию 5 элементов
-         * @param capacity размер кэш второго уровня.
-         * @return ссылку на объект класса CacheBuilder
-         */
-        public CacheBuilder upFileCapacity(int capacity) {
-            if (capacity > doubleCache.fileCache.getCapacity()
-                    && doubleCache.fileCache != null) {
-                doubleCache.fileCache.increaseCapacity(capacity);
-            }
-            return this;
-        }
+    @Override
+    public boolean setPath(String path) {
+        return fileCache.setPath(path);
     }
 }
