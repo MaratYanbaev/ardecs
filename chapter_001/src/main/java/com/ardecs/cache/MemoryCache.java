@@ -26,24 +26,22 @@ class MemoryCache<K, V> implements Cache<K, V> {
     }
 
     @Override
-    public Object[] putToCache(K key, V value) throws NullPointerException {
-        if ((value == null) && (key == null)) {
-            throw new NullPointerException("value and key can't be null");
+    public KeyValue<K, V> putToCache(K key, V value) {
+        if ((value == null) || (key == null)) {
+            throw new KeyValueIsNullException("value and key can't be null");
         }
-        Object[] o = null;
+        KeyValue<K, V> keyValue = null;
         if (!(hasEmptyPlace())) {
-            o = new Object[2];
-            K k = extractFromStrategy();
-            o[0] = k;
+            K k = getPriorityKey();
             V v = removeFromCache(k);
-            o[1] = v;
+            keyValue = new KeyValue<>(k, v);
             memoryStorage.put(key, value);
             memoryStrategy.putKey(key);
         } else {
             memoryStorage.put(key, value);
             memoryStrategy.putKey(key);
         }
-        return o;
+        return keyValue;
     }
 
     @Override
@@ -51,7 +49,7 @@ class MemoryCache<K, V> implements Cache<K, V> {
         V value = null;
         if (isPresent(key)) {
             value = memoryStorage.get(key);
-            memoryStrategy.updateLongOfKey(key);
+            memoryStrategy.updatePriorityOfKey(key);
         }
         return value;
     }
@@ -60,7 +58,7 @@ class MemoryCache<K, V> implements Cache<K, V> {
     public V removeFromCache(K key) {
         V value = null;
         if (isPresent(key)) {
-            memoryStrategy.removeFromStrategy(key);
+            memoryStrategy.removeKey(key);
             value = memoryStorage.remove(key);
         }
         return value;
@@ -77,32 +75,14 @@ class MemoryCache<K, V> implements Cache<K, V> {
     }
 
     @Override
-    public K extractFromStrategy() {
-        return memoryStrategy.extractKey();
+    public K getPriorityKey() {
+        return memoryStrategy.getPriorityKey();
     }
 
     @Override
     public void clearCache() {
         memoryStorage.clear();
         memoryStrategy.clear();
-    }
-
-    @Override
-    public boolean changeStrategy(StrategyType type) {
-        if (this.memoryStorage.size() == 0) {
-            this.memoryStrategy = getStrategy(type);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean increaseCapacity(int capacity) {
-        if (capacity > this.capacity) {
-            this.capacity = capacity;
-            return true;
-        }
-        return false;
     }
 
     @Override

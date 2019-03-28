@@ -12,14 +12,7 @@ package com.ardecs.strategy;
 public class LRUStrategy<K> extends CacheStrategy<K> {
 
     @Override
-    public K extractKey() {
-        K key = getStorageOfKey().pollFirstEntry().getValue();
-        getStorageOfLong().remove(key);
-        return key;
-    }
-
-    @Override
-    public void removeFromStrategy(K key) {
-
+    public K getPriorityKey() {
+        return getPriorityAndKey().firstEntry().getValue();
     }
 }

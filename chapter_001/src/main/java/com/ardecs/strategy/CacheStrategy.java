@@ -11,60 +11,64 @@ import java.util.TreeMap;
 public abstract class CacheStrategy<K> {
     /**
      * Данная коллекция необходима
-     * для обновления значения Long
+     * для обновления значения Long(Priority)
      * при просмотре объекта из хэш.
+     * Priority - приоритет удаления согласно стратегии
      */
-    private HashMap<K, Long> storageOfLong;
+    private HashMap<K, Long> keyAndPriority;
 
     /**
-     * По значению определяющие приоритет
+     * По значению Priority(Long) определяющее приоритет
      * удаления, получаем соответствующий ключ,
-     * который отображает удаляемый объект из хэш
+     * который в свою очередь отображает удаляемый объект из хэш
      */
-    private TreeMap<Long, K> storageOfKey;
+    private TreeMap<Long, K> priorityAndKey;
 
     CacheStrategy() {
-        storageOfKey = new TreeMap<>();
-        storageOfLong = new HashMap<>();
+        priorityAndKey = new TreeMap<>();
+        keyAndPriority = new HashMap<>();
     }
 
     /**
-     * Метод удаляет ключ из стратегии
+     * Метод по приоритету
+     * удаляет ключ из стратегии
      * согласно логики.
      * @return - ключ.
      */
-    public abstract K extractKey();
+    public abstract K getPriorityKey();
 
-    public abstract void removeFromStrategy(K key);
+    public void removeKey(K key) {
+        priorityAndKey.remove(keyAndPriority.remove(key));
+    }
 
     /**
      *
      * @param key - ключ
      */
-    public void updateLongOfKey(K key) {
-        long newLong = System.nanoTime();
-        Long oldLong = getStorageOfLong().replace(key, newLong);
-        getStorageOfKey().remove(oldLong);
-        getStorageOfKey().put(newLong, key);
+    public void updatePriorityOfKey(K key) {
+        long newLevel = System.nanoTime();
+        Long oldLevel = getKeyAndPriority().replace(key, newLevel);
+        getPriorityAndKey().remove(oldLevel);
+        getPriorityAndKey().put(newLevel, key);
     }
 
     public void putKey(K key) {
-        Long newLong = System.nanoTime();
-        getStorageOfLong().put(key, newLong);
-        getStorageOfKey().put(newLong, key);
+        Long newLevel = System.nanoTime();
+        getKeyAndPriority().put(key, newLevel);
+        getPriorityAndKey().put(newLevel, key);
     }
 
     public void clear() {
-        storageOfKey.clear();
-        storageOfLong.clear();
+        priorityAndKey.clear();
+        keyAndPriority.clear();
     }
 
-    public HashMap<K, Long> getStorageOfLong() {
-        return storageOfLong;
+    public HashMap<K, Long> getKeyAndPriority() {
+        return keyAndPriority;
     }
 
-    public TreeMap<Long, K> getStorageOfKey() {
-        return storageOfKey;
+    public TreeMap<Long, K> getPriorityAndKey() {
+        return priorityAndKey;
     }
 }
 

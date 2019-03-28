@@ -5,14 +5,14 @@ import com.ardecs.strategy.*;
 interface Cache<K, V> {
 
     /**
-     * Хранение value = null не допускается.
+     * Хранение value и key = null не допускается, иначе
+     * будет выброшено исключение
      * @param key ключ
      * @param value значение/объект
      * @return null, если кэш не переполнен, иначе
-     * массив типа Object в котором под индексом 0
-     * хранится ключ, а под индексом 1 значение/объект
+     * объект типа KeyValue, который содержит ключ и значение.
      */
-    Object[] putToCache(K key, V value);
+    KeyValue<K, V> putToCache(K key, V value);
 
     V getFromCache(K key);
 
@@ -29,7 +29,7 @@ interface Cache<K, V> {
      * Ключ при этом удаляется из стратегии.
      * @return - ключ.
      */
-    K extractFromStrategy();
+    K getPriorityKey();
 
     void clearCache();
 
@@ -50,18 +50,7 @@ interface Cache<K, V> {
         return fileStrategy;
     }
 
-    boolean increaseCapacity(int capacity);
-
     CacheStrategy<K> getStrategy();
-
-    /**
-     * Метод позволяет изменить стратегию удаления
-     * элемента при переполнении кэш.
-     * Изменеие стратегии возможно, если кэш пустой.
-     * @param type - тип стратегии.
-     * @return true, если стратегия изменина, иначе false
-     */
-    boolean changeStrategy(StrategyType type);
 
     /**
      * @return возвращает колличество элементов

@@ -18,8 +18,7 @@ public class MemoryCacheLFUTest {
 
     @Before
     public void set() {
-        memoryCache = new MemoryCache<>();
-        memoryCache.changeStrategy(StrategyType.LFU);
+        memoryCache = new MemoryCache(StrategyType.LFU, 5);
         User one = new User(1, "Koly");
         User two = new User(2, "Sergei");
         User three = new User(3, "Oly");

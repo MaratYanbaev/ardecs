@@ -3,10 +3,12 @@ package com.ardecs.cache;
 import com.ardecs.strategy.*;
 
 import java.io.*;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.Arrays.asList;
 
 /**
  * @author Marat Yanbaev (yanbaevms@gmail.com)
@@ -17,41 +19,36 @@ public class FileCache<K, V extends Serializable> implements Cache<K, V> {
     private File dir;
     private String path;
     private int capacity = 5;
-    private String[] savedKeys = new String[0];
-
-    public FileCache() {
-        this.fileStrategy = new MRUStrategy<>();
-        setPath(null);
-    }
+    private List<String> savedKeys;
 
     public FileCache(String path) {
         this.fileStrategy = new MRUStrategy<>();
+        savedKeys = new ArrayList<>(capacity);
         setPath(path);
     }
 
     public FileCache(StrategyType memoryStrategy, int capacity, String path) {
         this.fileStrategy = getStrategy(memoryStrategy);
         this.capacity = capacity;
+        savedKeys = new ArrayList<>(capacity);
         setPath(path);
     }
 
     @Override
-    public Object[] putToCache(K key, V value) throws NullPointerException {
-        if ((value == null) && (key == null)) {
-            throw new NullPointerException("value and key can't be null");
+    public KeyValue<K, V> putToCache(K key, V value) {
+        if ((value == null) || (key == null)) {
+            throw new KeyValueIsNullException("value and key can't be null");
         }
-        Object[] o = null;
+        KeyValue<K, V> keyValue = null;
         if (!(hasEmptyPlace())) {
-            o = new Object[2];
-            K k = extractFromStrategy();
-            o[0] = k;
+            K k = getPriorityKey();
             V v = removeFromCache(k);
-            o[1] = v;
+            keyValue = new KeyValue<>(k, v);
             writeDate(key, value);
         } else {
             writeDate(key, value);
         }
-        return o;
+        return keyValue;
     }
 
     @Override
@@ -59,7 +56,7 @@ public class FileCache<K, V extends Serializable> implements Cache<K, V> {
         V value = null;
         if (isPresent(key)) {
             value = get(key);
-            fileStrategy.updateLongOfKey(key);
+            fileStrategy.updatePriorityOfKey(key);
         }
         return value;
     }
@@ -74,69 +71,42 @@ public class FileCache<K, V extends Serializable> implements Cache<K, V> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            fileStrategy.removeFromStrategy(key);
-            savedKeys = dir.list();
+            fileStrategy.removeKey(key);
+            savedKeys = asList(dir.list());
         }
         return value;
     }
 
     @Override
     public boolean isPresent(K key) {
-        if (savedKeys.length > 0) {
-            String sKey = key.toString();
-            for (String k: savedKeys) {
-                if (sKey.equals(k)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        String k = String.valueOf(key);
+        return savedKeys.contains(k);
     }
 
     @Override
     public boolean hasEmptyPlace() {
-        return savedKeys.length < capacity;
+        return savedKeys.size() < capacity;
     }
 
     @Override
-    public K extractFromStrategy() {
-        return fileStrategy.extractKey();
+    public K getPriorityKey() {
+        return fileStrategy.getPriorityKey();
     }
 
     @Override
     public void clearCache() {
-        if (savedKeys.length > 0) {
-            int i = 0;
-            int length = dir.list().length;
-            while ((length != 0) && (i < length)) {
-                try {
-                    Files.delete(Path.of(path, savedKeys[i]));
-                } catch (IOException e) {
-                    e.printStackTrace();
+        if (savedKeys.size() > 0) {
+            try {
+                for (String key : savedKeys) {
+                    Files.delete(Path.of(path, key));
                 }
-                i++;
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            savedKeys = dir.list();
-            fileStrategy.clear();
         }
-    }
+        savedKeys = asList(dir.list());
+        fileStrategy.clear();
 
-    @Override
-    public boolean changeStrategy(StrategyType type) {
-        if (getCacheSize() == 0) {
-            this.fileStrategy = getStrategy(type);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean increaseCapacity(int capacity) {
-        if (capacity > this.capacity) {
-            this.capacity = capacity;
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -146,7 +116,7 @@ public class FileCache<K, V extends Serializable> implements Cache<K, V> {
 
     @Override
     public int getCacheSize() {
-        return savedKeys.length;
+        return savedKeys.size();
     }
 
     @Override
@@ -157,6 +127,7 @@ public class FileCache<K, V extends Serializable> implements Cache<K, V> {
     /**
      * Указать новый путь для записи файлов
      * возможно только, если файловый кэш пустой.
+     *
      * @param path - путь
      * @return true, если кэш пустой, иначе false
      */
@@ -177,8 +148,9 @@ public class FileCache<K, V extends Serializable> implements Cache<K, V> {
     }
 
     /**
-     * Метод записи данных/value
-     * @param key - ключ/имя файла
+     * Метод записи на диск значения/value
+     *
+     * @param key   - ключ/имя файла
      * @param value - данные
      */
     private void writeDate(K key, V value) {
@@ -191,11 +163,12 @@ public class FileCache<K, V extends Serializable> implements Cache<K, V> {
             e.printStackTrace();
         }
         fileStrategy.putKey(key);
-        savedKeys = dir.list();
+        savedKeys = asList(dir.list());
     }
 
     /**
-     * Метод получения значения/value по ключу
+     * Метод полученияс диска значения/value по ключу
+     *
      * @param key - ключ/имя файла
      * @return значения/value
      */

@@ -12,28 +12,21 @@ class DoubleCache<K, V extends Serializable> implements Cache<K, V> {
     private MemoryCache<K, V> memoryCache;
     private FileCache<K, V> fileCache;
 
-    public DoubleCache() {
-        memoryCache = new MemoryCache<>();
-        fileCache = new FileCache<>();
-    }
-
-    public DoubleCache(String path) {
-        memoryCache = new MemoryCache<>();
-        fileCache = new FileCache<>(path);
-    }
-
     public DoubleCache(StrategyType type, int capacity, String path) {
         memoryCache = new MemoryCache<>(type, capacity);
         fileCache = new FileCache<>(type, capacity, path);
     }
 
     @Override
-    public Object[] putToCache(K key, V value) {
-        Object[] i = memoryCache.putToCache(key, value);
-        if (i != null) {
-            i = fileCache.putToCache((K) i[0], (V) i[1]);
+    public KeyValue<K, V> putToCache(K key, V value) {
+        if ((value == null) || (key == null)) {
+            throw new KeyValueIsNullException("value and key can't be null");
         }
-        return i;
+        KeyValue<K, V> keyValue = memoryCache.putToCache(key, value);
+        if (keyValue != null) {
+            keyValue = fileCache.putToCache(keyValue.getKey(), keyValue.getValue());
+        }
+        return keyValue;
     }
 
 
@@ -50,7 +43,11 @@ class DoubleCache<K, V extends Serializable> implements Cache<K, V> {
 
     @Override
     public V removeFromCache(K key) {
-        return null;
+        V value = memoryCache.removeFromCache(key);
+        if (value == null) {
+            value = fileCache.removeFromCache(key);
+        }
+        return value;
     }
 
     @Override
@@ -60,11 +57,15 @@ class DoubleCache<K, V extends Serializable> implements Cache<K, V> {
 
     @Override
     public boolean hasEmptyPlace() {
-        return false;
+        return fileCache.hasEmptyPlace();
     }
 
+    /**
+     * Данный метод ничего не делает
+     * @return - всегда возвращает null
+     */
     @Override
-    public K extractFromStrategy() {
+    public K getPriorityKey() {
         return null;
     }
 
@@ -72,21 +73,6 @@ class DoubleCache<K, V extends Serializable> implements Cache<K, V> {
     public void clearCache() {
         memoryCache.clearCache();
         fileCache.clearCache();
-    }
-
-    @Override
-    public boolean changeStrategy(StrategyType type) {
-        if (memoryCache.changeStrategy(type)) {
-            fileCache.changeStrategy(type);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean increaseCapacity(int capacity) {
-        return memoryCache.increaseCapacity(capacity)
-                && fileCache.increaseCapacity(capacity);
     }
 
     @Override
