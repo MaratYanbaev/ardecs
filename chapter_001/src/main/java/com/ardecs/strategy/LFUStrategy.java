@@ -46,22 +46,23 @@ public class LFUStrategy<K> extends CacheStrategy<K> {
 
     @Override
     public void updatePriorityOfKey(K key) {
+        TreeMap<Long, K> priorityAndKey = getPriorityAndKey();
         Long oldPriority = getKeyAndPriority().get(key);
         Long updatePriority = oldPriority + 1;
         getKeyAndPriority().replace(key, updatePriority);
-        K k = getPriorityAndKey().get(oldPriority);
+        K k = priorityAndKey.get(oldPriority);
         if (k.equals(key)) {
             k = getKey(oldPriority);
             if (k != null) {
-                getPriorityAndKey().put(oldPriority, k);
+                priorityAndKey.put(oldPriority, k);
             } else {
-                getPriorityAndKey().remove(oldPriority);
-                if (!(getPriorityAndKey().containsKey(updatePriority))) {
-                    getPriorityAndKey().put(updatePriority, key);
+                priorityAndKey.remove(oldPriority);
+                if (!(priorityAndKey.containsKey(updatePriority))) {
+                    priorityAndKey.put(updatePriority, key);
                 }
             }
-        } else if (!(getPriorityAndKey().containsKey(updatePriority))) {
-            getPriorityAndKey().put(updatePriority, key);
+        } else if (!(priorityAndKey.containsKey(updatePriority))) {
+            priorityAndKey.put(updatePriority, key);
         }
     }
 

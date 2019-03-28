@@ -44,10 +44,8 @@ public class FileCache<K, V extends Serializable> implements Cache<K, V> {
             K k = getPriorityKey();
             V v = removeFromCache(k);
             keyValue = new KeyValue<>(k, v);
-            writeDate(key, value);
-        } else {
-            writeDate(key, value);
         }
+        writeDate(key, value);
         return keyValue;
     }
 

@@ -35,12 +35,9 @@ class MemoryCache<K, V> implements Cache<K, V> {
             K k = getPriorityKey();
             V v = removeFromCache(k);
             keyValue = new KeyValue<>(k, v);
-            memoryStorage.put(key, value);
-            memoryStrategy.putKey(key);
-        } else {
-            memoryStorage.put(key, value);
-            memoryStrategy.putKey(key);
         }
+        memoryStorage.put(key, value);
+        memoryStrategy.putKey(key);
         return keyValue;
     }
 
