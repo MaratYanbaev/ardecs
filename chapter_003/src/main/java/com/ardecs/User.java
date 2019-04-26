@@ -1,4 +1,4 @@
-package com.ardecs.chapter_003;
+package com.ardecs;
 
 /**
  * @author Marat Yanbaev (yanbaevms@gmail.com)
@@ -17,6 +17,6 @@ public class User {
     }
 
     public void getTuTu() {
-        System.out.println(tuTu);;
+        System.out.println(tuTu);
     }
 }
