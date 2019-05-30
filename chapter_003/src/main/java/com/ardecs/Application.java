@@ -7,12 +7,14 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class Application {
 
     public static void main(String[] args) {
-        ApplicationContext context = new ClassPathXmlApplicationContext("myContext.xml");
-        User user = (User) context.getBean("user");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("myContext.xml");
+        UserBean user = context.getBean("userBean", UserBean.class);
         user.getTuTu();
 
         ApplicationContext ctx = new AnnotationConfigApplicationContext(UserConfiguration.class);
-        user = ctx.getBean(User.class);
+        user = ctx.getBean(UserBean.class);
         user.getTuTu();
+
+        context.close();
     }
 }

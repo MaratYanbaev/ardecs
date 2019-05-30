@@ -1,10 +1,10 @@
 ﻿<project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ardecs</groupId>
-    <artifactId>junior</artifactId>
+    <artifactId>start</artifactId>
     <packaging>pom</packaging>
     <version>1.0</version>
-    <name>junior</name>
+    <name>start</name>
     <url>http://www.ardecs.com/</url>
 
     <properties>
@@ -15,8 +15,8 @@
 
     <modules>
         <module>chapter_001</module>
-        <module>chapter_002</module>
         <module>chapter_003</module>
+        <module>chapter_004</module>
     </modules>
 
     <build>

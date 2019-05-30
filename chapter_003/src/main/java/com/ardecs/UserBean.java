@@ -6,13 +6,13 @@ package com.ardecs;
  */
 
 
-public class User {
+public class UserBean {
     private String tuTu = "tuTu";
 
-    public User() {
+    public UserBean() {
     }
 
-    public User(String tuTu) {
+    public UserBean(String tuTu) {
         this.tuTu = tuTu;
     }
 
