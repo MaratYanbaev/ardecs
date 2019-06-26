@@ -1,4 +1,4 @@
-package com.ardecs.car_configurator;
+package com.ardecs.car_configurator.entities;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -8,16 +8,16 @@ import java.util.Set;
  * @since 04.05.2019
  */
 @Entity
-@Table(name = "engine", schema = "car_configurator")
-public class EngineEntity {
+@Table(name = "engine")
+public class Engine {
     private Long engineId;
     private String name;
-    private Integer price;
     private String description;
-    private Set<EquipmentEntity> equipmentEntities;
+    private Set<EngineModCom> engineModComSet;
 
     @Id
-    @Column(name = "engine_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
     public Long getEngineId() {
         return engineId;
     }
@@ -26,16 +26,13 @@ public class EngineEntity {
         this.engineId = engineId;
     }
 
-    @ManyToMany
-    @JoinTable(name = "equipment_engine",
-    joinColumns = @JoinColumn(name = "engine_id"),
-    inverseJoinColumns = @JoinColumn(name = "equip_id"))
-    public Set<EquipmentEntity> getEquipmentEntities() {
-        return equipmentEntities;
+    @OneToMany(mappedBy = "engine")
+    public Set<EngineModCom> getEngineModComSet() {
+        return engineModComSet;
     }
 
-    public void setEquipmentEntities(Set<EquipmentEntity> equipmentEntity) {
-        this.equipmentEntities = equipmentEntity;
+    public void setEngineModComSet(Set<EngineModCom> engineModComSet) {
+        this.engineModComSet = engineModComSet;
     }
 
     @Basic
@@ -46,16 +43,6 @@ public class EngineEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Basic
-    @Column(name = "price", nullable = false)
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
     }
 
     @Basic
@@ -73,11 +60,10 @@ public class EngineEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        EngineEntity that = (EngineEntity) o;
+        Engine that = (Engine) o;
 
         if (engineId != null ? !engineId.equals(that.engineId) : that.engineId != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (price != null ? !price.equals(that.price) : that.price != null) return false;
         return description != null ? description.equals(that.description) : that.description == null;
 
     }
@@ -86,7 +72,6 @@ public class EngineEntity {
     public int hashCode() {
         int result = engineId != null ? engineId.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (price != null ? price.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
     }

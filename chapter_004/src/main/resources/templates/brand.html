@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Производители</title>
+    <style>
+        .container {
+            width: inherit;
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: auto;
+            text-align: -moz-center;
+        }
+
+        .card {
+            position: relative;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 1px solid rgba(0, 0, 0, .125);
+            border-radius: .25rem;
+            width: max-content;
+        }
+
+        tr {
+            height: 40px;
+        }
+
+        img {
+            vertical-align: bottom;
+        }
+
+        span {
+            vertical-align: super;
+            font-size: larger;
+        }
+
+        td {
+            width: 150px;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div style="width: 100%">
+            <p>
+                <a href="new" class="second">
+                    <img src="http://localhost:63342/junior/chapter_004/static/images/add.png">
+                </a>
+            </p>
+            <div style="width: 100%">
+                <table>
+                    <tbody style="background: lightgoldenrodyellow">
+                    <tr th:each="brand : ${brandList}">
+                        <td>
+                            <span>[[${brand.name}]]</span>
+                        </td>
+                        <td>
+                            <a th:href="@{/model/{id}(id=${brand.id})}">
+                                <img src="http://localhost:63342/junior/chapter_004/static/images/view.png">
+                            </a>
+                        </td>
+                        <td>
+                            <form th:action="@{{id}(id=${brand.id})}"
+                                  th:method="get">
+                                <input type="image"
+                                       class="second"
+                                       src="http://localhost:63342/junior/chapter_004/static/images/fix.png"
+                                />
+                            </form>
+                        </td>
+                        <td>
+                            <form th:action="@{{id}(id=${brand.id})}"
+                                  th:method="delete">
+                                <input type="image"
+                                       class="second"
+                                       src="http://localhost:63342/junior/chapter_004/static/images/delete.png"
+                                />
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

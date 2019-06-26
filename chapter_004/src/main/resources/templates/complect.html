@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Модели</title>
+    <style>
+        .container {
+            width: inherit;
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: auto;
+            text-align: -moz-center;
+        }
+
+        .card {
+            position: relative;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 1px solid rgba(0, 0, 0, .125);
+            border-radius: .25rem;
+            width: max-content;
+        }
+
+        .tools {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .price {
+            float: left;
+            margin-left: 10px;
+        }
+
+        tr {
+            height: 40px;
+        }
+
+        img {
+            vertical-align: bottom;
+        }
+
+        span {
+            vertical-align: super;
+            font-size: larger;
+        }
+
+        td {
+            width: 150px;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="tools">
+            <div>
+                <a th:href="@{/complect/new/{modelId}/{brandId}(modelId=${modelId},brandId=${brandId})}">
+                    <img src="http://localhost:63342/junior/chapter_004/static/images/add.png">
+                </a>
+            </div>
+            <div>
+                <a th:href="@{/model/{brandId}(brandId=${brandId})}">
+                    <img src="http://localhost:63342/junior/chapter_004/static/images/back.png">
+                </a>
+            </div>
+        </div>
+        <div style="width: 100%">
+            <table>
+                <tbody style="background: lightgoldenrodyellow">
+                <tr th:each="complect : ${complectations}">
+                    <td>
+                        <span>[[${complect.name}]]</span>
+                    </td>
+                    <td>
+                        <img src="http://localhost:63342/junior/chapter_004/static/images/price.png">
+                        <span>[[${prices.next()}]]</span>
+                    </td>
+                    <td>
+                        <a type="image" th:href="@{/complect/{id}(id=${complect.compId})}">
+                            <img src="http://localhost:63342/junior/chapter_004/static/images/view.png"/>
+                        </a>
+                    </td>
+                    <td>
+                        <form th:action="@{/model/{id}(id=${complect.compId})}"
+                              th:method="put">
+                            <input type="image"
+                                   src="http://localhost:63342/junior/chapter_004/static/images/fix.png"
+                            />
+                        </form>
+                    </td>
+                    <td>
+                        <form th:action="@{/model/{brandId}(brandId=${brandId})}"
+                              th:method="delete">
+                            <input type="image"
+                                   src="http://localhost:63342/junior/chapter_004/static/images/delete.png">
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-package com.ardecs.car_configurator;
+package com.ardecs.car_configurator.entities;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -8,35 +8,39 @@ import java.util.Set;
  * @since 04.05.2019
  */
 @Entity
-@Table(name = "brand", schema = "car_configurator")
-public class BrandEntity {
+@Table(name = "brand")
+public class Brand {
 
-    private Long brandId;
+    private Long id;
     private String name;
-    private Set<ModelEntity> modelEntity;
+    private Set<Model> modelSet;
 
-    public BrandEntity() {
+    public Brand() {
+    }
+
+    public Brand(String name) {
+        this.name = name;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "brand_id", nullable = false)
-    public Long getBrandId() {
-        return brandId;
+    @Column(name = "id", nullable = false)
+    public Long getId() {
+        return id;
     }
 
-    public void setBrandId(Long brandId) {
-        this.brandId = brandId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    @OneToMany(mappedBy = "brandEntity", orphanRemoval = true)
+    @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL)
 //    @OrderBy("price desc")
-    public Set<ModelEntity> getModelEntity() {
-        return modelEntity;
+    public Set<Model> getModelSet() {
+        return modelSet;
     }
 
-    public void setModelEntity(Set<ModelEntity> modelEntity) {
-        this.modelEntity = modelEntity;
+    public void setModelSet(Set<Model> model) {
+        this.modelSet = model;
     }
 
     @Basic
@@ -54,16 +58,16 @@ public class BrandEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        BrandEntity that = (BrandEntity) o;
+        Brand that = (Brand) o;
 
-        if (brandId != null ? !brandId.equals(that.brandId) : that.brandId != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         return name != null ? name.equals(that.name) : that.name == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = brandId != null ? brandId.hashCode() : 0;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }

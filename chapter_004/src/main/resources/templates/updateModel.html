@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Изменить данные</title>
+    <style>
+        .container {
+            width: inherit;
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: auto
+        }
+
+        .card {
+            position: relative;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 1px solid rgba(0, 0, 0, .125);
+            border-radius: .25rem;
+            width: 50%
+        }
+
+        p {
+            border: 1px solid rgba(0, 0, 0, .125);
+            border-radius: .25rem;
+            width: 100%;
+            margin-left: 10%;
+            background: cornsilk;
+        }
+
+        .tools {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .put {
+            margin-right: 20px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="tools">
+            <div style="width: 50%">
+                <p>Обновление данных</p>
+                <p>[[${model.name}]]</p>
+                <p>id - [[${model.modelId}]]</p>
+            </div>
+            <div>
+                <a th:href="@{/model/{id}(id=${model.brandId})}">
+                    <img src="http://localhost:63342/junior/chapter_004/static/images/back.png">
+                </a>
+            </div>
+        </div>
+        <div>
+            <form th:object="${model}" th:action="@{change}" th:method="put">
+                <div>
+                    <div style="margin-left: 5%; margin-top: 10px; margin-bottom: 10px;">
+                        <label>Название модели:</label>
+                        <input type="text" th:field="*{name}">
+                        <input type="hidden" th:field="*{brandId}">
+                        <input type="hidden" th:field="*{modelId}">
+                    </div>
+                    <div style="margin-left: 5%; margin-top: 10px; margin-bottom: 10px;">
+                        <label>Стоимость модели:</label>
+                        <input type="text" th:field="*{price}">
+                    </div>
+                    <div>
+                        <input class="put" type="submit" value="Обновить"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

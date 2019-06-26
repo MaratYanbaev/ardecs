@@ -1,6 +1,6 @@
 package com.ardecs.repositories;
 
-import com.ardecs.car_configurator.ColorEntity;
+import com.ardecs.car_configurator.entities.ColorEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

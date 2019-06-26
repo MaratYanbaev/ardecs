@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить новый бренд</title>
+    <style>
+        .container {
+            width: inherit;
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: auto
+        }
+
+        .card {
+            position: relative;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 1px solid rgba(0, 0, 0, .125);
+            border-radius: .25rem;
+            width: 50%
+        }
+
+        p {
+            border: 1px solid rgba(0, 0, 0, .125);
+            border-radius: .25rem;
+            width: 100%;
+            margin-left: 10%;
+            background: cornsilk;
+        }
+
+        .tools {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .put {
+            margin-right: 20px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="tools">
+            <div style="width: 50%">
+                <p>Добавить новый бренд</p>
+            </div>
+            <div>
+                <a th:href="@{/brand/list}">
+                    <img src="http://localhost:63342/junior/chapter_004/static/images/back.png">
+                </a>
+            </div>
+        </div>
+        <div>
+            <form th:object="${brand}" th:action="@{new}" th:method="post">
+                <div>
+                    <div style="margin-left: 5%; margin-top: 10px; margin-bottom: 10px;">
+                        <label style="margin-right: 10px" for="brandId">Название бренда:</label>
+                        <input type="text" id="brandId" th:field="*{name}"/>
+                    </div>
+                    <div>
+                        <input class="put" type="submit" value="Записать"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
