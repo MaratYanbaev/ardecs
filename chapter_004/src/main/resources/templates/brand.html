@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Производители</title>
+    <title>Producers</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <style>
-        .container {
+        .containerInner {
             width: inherit;
             padding-right: 15px;
             padding-left: 15px;
@@ -13,7 +15,7 @@
             text-align: -moz-center;
         }
 
-        .card {
+        .cardInner {
             position: relative;
             background-color: #fff;
             background-clip: border-box;
@@ -44,8 +46,17 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="card">
+
+<form style="margin-top: 5px; margin-bottom: 5px" th:action="@{/logout}" method="get">
+    <button class="btn btn-md btn-danger btn-block" name="registration" type="Submit">Logout</button>
+</form>
+
+<form style="margin-bottom: 5px" th:action="@{/registration}" method="get" sec:authorize="hasRole('ADMIN')">
+    <button class="btn btn-md btn-warning btn-block" type="Submit">Go to Registration Page</button>
+</form>
+
+<div class="containerInner">
+    <div class="cardInner">
         <div style="width: 100%">
             <p>
                 <a href="new" class="second">
@@ -73,7 +84,7 @@
                                 />
                             </form>
                         </td>
-                        <td>
+                        <td sec:authorize="hasRole('ADMIN')">
                             <form th:action="@{{id}(id=${brand.id})}"
                                   th:method="delete">
                                 <input type="image"

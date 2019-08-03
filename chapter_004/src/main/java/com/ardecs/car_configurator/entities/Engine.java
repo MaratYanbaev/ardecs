@@ -1,5 +1,7 @@
 package com.ardecs.car_configurator.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -10,20 +12,21 @@ import java.util.Set;
 @Entity
 @Table(name = "engine")
 public class Engine {
-    private Long engineId;
+    private Long id;
     private String name;
     private String description;
+    @JsonBackReference
     private Set<EngineModCom> engineModComSet;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    public Long getEngineId() {
-        return engineId;
+    public Long getId() {
+        return id;
     }
 
-    public void setEngineId(Long engineId) {
-        this.engineId = engineId;
+    public void setId(Long engineId) {
+        this.id = engineId;
     }
 
     @OneToMany(mappedBy = "engine")
@@ -62,7 +65,7 @@ public class Engine {
 
         Engine that = (Engine) o;
 
-        if (engineId != null ? !engineId.equals(that.engineId) : that.engineId != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         return description != null ? description.equals(that.description) : that.description == null;
 
@@ -70,7 +73,7 @@ public class Engine {
 
     @Override
     public int hashCode() {
-        int result = engineId != null ? engineId.hashCode() : 0;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;

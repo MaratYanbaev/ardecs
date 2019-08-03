@@ -1,8 +1,9 @@
-package com.ardecs.service;
+package com.ardecs.services;
 
 import com.ardecs.car_configurator.entities.Complectation;
 import com.ardecs.repositories.ComplectationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,8 +26,12 @@ public class ComplectationService {
         return complectationRepository.getCompByIdOfBrand(brandId);
     }
 
-    public Long findCompIdByNameOfComplect(String name) {
-        return complectationRepository.findCompIdByNameOfComplect(name);
+    public Long findIdByNameOfComplect(String name) {
+        return complectationRepository.findIdByNameOfComplect(name);
+    }
+
+    public List<Complectation> getAllComplectation() {
+        return complectationRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
     }
 
     public Complectation save(Complectation complectation) {

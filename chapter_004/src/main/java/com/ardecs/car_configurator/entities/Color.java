@@ -1,5 +1,7 @@
 package com.ardecs.car_configurator.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -9,10 +11,11 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "color")
-public class ColorEntity {
+public class Color {
 
     private Long id;
     private String name;
+    @JsonBackReference
     private Set<ColorModCom> colorModComSet;
 
     @Id
@@ -36,7 +39,7 @@ public class ColorEntity {
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "colorEntity")
+    @OneToMany(mappedBy = "color")
     public Set<ColorModCom> getColorModComSet() {
         return colorModComSet;
     }
@@ -50,7 +53,7 @@ public class ColorEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ColorEntity that = (ColorEntity) o;
+        Color that = (Color) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         return name != null ? name.equals(that.name) : that.name == null;

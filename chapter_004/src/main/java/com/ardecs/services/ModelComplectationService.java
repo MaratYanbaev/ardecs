@@ -1,8 +1,7 @@
-package com.ardecs.service;
+package com.ardecs.services;
 
-import com.ardecs.car_configurator.entities.Complectation;
+import com.ardecs.car_configurator.compositeId.ModelCompId;
 import com.ardecs.car_configurator.entities.ModelComplectation;
-import com.ardecs.car_configurator.identificators.ModelCompId;
 import com.ardecs.repositories.ComplectationRepository;
 import com.ardecs.repositories.ModelComplectationRepository;
 import com.ardecs.repositories.ModelRepository;
@@ -31,17 +30,22 @@ public class ModelComplectationService {
     }
 
     public void addComplect(String name, int price, Long modelId) {
-        Long compId = complectationRepository.findCompIdByNameOfComplect(name);
-        if (compId == null) {
-            Complectation entity = new Complectation();
-            entity.setName(name);
-            compId = complectationRepository.save(entity).getCompId();
-        }
+        Long compId = complectationRepository.findIdByNameOfComplect(name);
         ModelComplectation entity = new ModelComplectation();
         entity.setId(new ModelCompId(modelId, compId));
         entity.setPrice(price);
         entity.setModel(modelRepository.findById(modelId).get());
         entity.setComplectation(complectationRepository.findById(compId).get());
         modelComplectationRepository.save(entity);
+    }
+
+    public void delete(Long modelId, Long compId) {
+        modelComplectationRepository.delete(modelId, compId);
+    }
+
+    public boolean existComplectation(Long modelId, String complectation) {
+        Long compId = complectationRepository.findIdByNameOfComplect(complectation);
+        ModelComplectation modelComplectation = modelComplectationRepository.existComplectation(modelId, compId);
+        return modelComplectationRepository.existComplectation(modelId, compId) == null;
     }
 }

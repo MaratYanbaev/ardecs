@@ -33,8 +33,5 @@ public interface ComplectationRepository extends JpaRepository<Complectation, Lo
     @Query(value = "select id from complectation\n" +
             "where name = :name",
             nativeQuery = true)
-    Long findCompIdByNameOfComplect(@Param("name") String name);
-
-    @Override
-    Complectation save(Complectation complectation);
+    Long findIdByNameOfComplect(@Param("name") String name);
 }

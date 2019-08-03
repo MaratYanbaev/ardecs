@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Модели</title>
+    <title>Models</title>
     <style>
         .container {
             width: inherit;
@@ -77,13 +77,13 @@
                     </td>
                     <td>
                         <a type="image"
-                           th:href="@{/model/{mId}/{bId}(mId=${model.id},bId=${brandId})}">
+                           th:href="@{/modComp/{mId}/{bId}(mId=${model.id},bId=${brandId})}">
                                <img src="http://localhost:63342/junior/chapter_004/static/images/view.png"/>
                         </a>
                     </td>
                     <td>
-                        <form th:action="@{/model/{id}(id=${model.id})}"
-                              th:method="put">
+                        <form th:action="@{/model/renewed/{id}(id=${model.id})}"
+                              th:method="get">
                             <input type="image"
                                    src="http://localhost:63342/junior/chapter_004/static/images/fix.png"
                             />

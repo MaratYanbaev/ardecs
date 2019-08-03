@@ -1,8 +1,13 @@
 package com.ardecs.car_configurator.entities;
 
-import com.ardecs.car_configurator.identificators.AccessoryModComId;
+import com.ardecs.car_configurator.compositeId.AccessoryModComId;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 /**
@@ -13,9 +18,14 @@ import java.util.Objects;
 @Table(name = "accessory_model_complect")
 public class AccessoryModCom {
 
+    @NotNull(message = "*Please provide price")
+    @Max(value = 1_000_000, message = "*Max value 1_000_000")
     private Integer price;
+    @JsonIgnore
     private AccessoryModComId accessoryModComId;
+    @JsonManagedReference
     private Accessory accessory;
+    @JsonBackReference
     private ModelComplectation modelComplectation;
 
     @Column(name = "price")

@@ -6,12 +6,14 @@ package com.ardecs.controller;
  */
 
 import com.ardecs.car_configurator.entities.Brand;
-import com.ardecs.service.BrandService;
+import com.ardecs.services.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -36,21 +38,41 @@ public class BrandController {
     }
 
     @PostMapping("new")
-    public String saveBrand(Brand brand) {
-//        if (errors.hasErrors()) {
-//            return null;//Вернуть страницу на, которой не правильно заполнили данные
-//        }
-        brandService.save(brand);
+    public String saveBrand(
+            @Valid Brand brand,
+            BindingResult bindingResult,
+            Model model
+    ) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("brand", brand);
+            return "newBrand";
+        } else {
+            brandService.save(brand);
+        }
+        return "redirect:list";
+    }
+
+    @PutMapping("renewed")
+    public String renewBrand(
+            @Valid Brand brand,
+            BindingResult bindingResult,
+            Model model
+    ) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("brand", brand);
+            return "changeBrand";
+        } else {
+            brandService.save(brand);
+        }
         return "redirect:list";
     }
 
     @GetMapping("{brandId}")
-    public String updateBrand(@PathVariable("brandId") Long brandId, Model model) {
-        Brand brand = brandService.getBrand(brandId);
+    public String changeBrand(@PathVariable("brandId") Long brandId, Model model) {
+        Brand brand = brandService.findById(brandId).get();
         model.addAttribute("brand", brand);
-        model.addAttribute("brandId", brand.getId());
 
-        return "updateBrand";
+        return "changeBrand";
     }
 
     @DeleteMapping("{brandId}")

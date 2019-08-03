@@ -1,5 +1,7 @@
 package com.ardecs.car_configurator.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -10,27 +12,28 @@ import java.util.Set;
 @Entity
 @Table(name = "complectation")
 public class Complectation {
-    private Long compId;
+    private Long id;
     private String name;
+    @JsonBackReference
     private Set<ModelComplectation> modelComplectationSet;
 
     public Complectation() {
     }
 
-    public Complectation(Long compId, String name) {
-        this.compId = compId;
+    public Complectation(Long id, String name) {
+        this.id = id;
         this.name = name;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    public Long getCompId() {
-        return compId;
+    public Long getId() {
+        return id;
     }
 
-    public void setCompId(Long equipId) {
-        this.compId = equipId;
+    public void setId(Long equipId) {
+        this.id = equipId;
     }
 
     @OneToMany(mappedBy = "complectation")
@@ -59,14 +62,14 @@ public class Complectation {
 
         Complectation that = (Complectation) o;
 
-        if (compId != null ? !compId.equals(that.compId) : that.compId != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         return name != null ? name.equals(that.name) : that.name == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = compId != null ? compId.hashCode() : 0;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }

@@ -1,8 +1,13 @@
 package com.ardecs.car_configurator.entities;
 
-import com.ardecs.car_configurator.identificators.ColorModComId;
+import com.ardecs.car_configurator.compositeId.ColorModComId;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 /**
@@ -13,9 +18,14 @@ import java.util.Objects;
 @Table(name = "color_model_complect")
 public class ColorModCom {
 
-    private ColorModComId colorModComId;
+    @NotNull(message = "*Please provide price")
+    @Max(value = 1_000_000, message = "*Max value 1_000_000")
     private Integer price;
-    private ColorEntity colorEntity;
+    @JsonIgnore
+    private ColorModComId colorModComId;
+    @JsonManagedReference
+    private Color color;
+    @JsonBackReference
     private ModelComplectation modelComplectation;
 
     @EmbeddedId
@@ -39,12 +49,12 @@ public class ColorModCom {
     @ManyToOne
     @MapsId(value = "colorId")
     @JoinColumn(name = "color_id", referencedColumnName = "id")
-    public ColorEntity getColorEntity() {
-        return colorEntity;
+    public Color getColor() {
+        return color;
     }
 
-    public void setColorEntity(ColorEntity colorEntity) {
-        this.colorEntity = colorEntity;
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     @ManyToOne
@@ -68,12 +78,12 @@ public class ColorModCom {
         ColorModCom that = (ColorModCom) o;
         return Objects.equals(colorModComId, that.colorModComId) &&
                 Objects.equals(price, that.price) &&
-                Objects.equals(colorEntity, that.colorEntity) &&
+                Objects.equals(color, that.color) &&
                 Objects.equals(modelComplectation, that.modelComplectation);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(colorModComId, price, colorEntity, modelComplectation);
+        return Objects.hash(colorModComId, price, color, modelComplectation);
     }
 }

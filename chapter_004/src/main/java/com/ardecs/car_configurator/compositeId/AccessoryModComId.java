@@ -1,4 +1,4 @@
-package com.ardecs.car_configurator.identificators;
+package com.ardecs.car_configurator.compositeId;
 
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;

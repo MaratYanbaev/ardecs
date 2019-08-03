@@ -1,12 +1,11 @@
-package com.ardecs.service;
+package com.ardecs.services;
 
-import com.ardecs.car_configurator.entities.Brand;
 import com.ardecs.car_configurator.entities.Model;
 import com.ardecs.repositories.ModelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
+import java.util.Optional;
 
 /**
  * @author Marat Yanbaev (yanbaevms@gmail.com)
@@ -20,19 +19,18 @@ public class ModelService {
     @Autowired
     BrandService brandService;
 
+    public Optional<Model> findById(Long id) {
+        return modelRepository.findById(id);
+    }
+
     public Model getModel(Long id) {
         return modelRepository
                 .findById(id)
                 .get();
     }
 
-    public Set<Model> getModels(Long id) {
-        Brand brand = brandService.getBrand(id);
-        return brand.getModelSet();
-    }
-
-    public void save(Model model) {
-        modelRepository.save(model);
+    public Model save(Model model) {
+        return modelRepository.save(model);
     }
 
     public void updateModel(Model model) {
@@ -43,7 +41,11 @@ public class ModelService {
         );
     }
 
-    public void deleteModel(Long id) {
+    public void deleteByModel(Model model) {
+        modelRepository.delete(model);
+    }
+
+    public void deleteModelById(Long id) {
         modelRepository.deleteById(id);
     }
 }

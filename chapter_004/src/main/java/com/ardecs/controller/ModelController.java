@@ -1,18 +1,17 @@
 package com.ardecs.controller;
 
-import com.ardecs.car_configurator.entities.Complectation;
 import com.ardecs.car_configurator.entities.Model;
-import com.ardecs.service.BrandService;
-import com.ardecs.service.ComplectationService;
-import com.ardecs.service.ModelComplectationService;
-import com.ardecs.service.ModelService;
+import com.ardecs.services.BrandService;
+import com.ardecs.services.ComplectationService;
+import com.ardecs.services.ModelComplectationService;
+import com.ardecs.services.ModelService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.ListIterator;
+import javax.validation.Valid;
 import java.util.Set;
 
 /**
@@ -36,23 +35,10 @@ public class ModelController {
 
     @GetMapping("{brandId}")
     public String showModels(@PathVariable("brandId") Long brandId, org.springframework.ui.Model model) {
-        Set<Model> modelEntities = modelService.getModels(brandId);
+        Set<Model> modelEntities = brandService.findById(brandId).get().getModelSet();
         model.addAttribute("modelEntityList", modelEntities);
         model.addAttribute("brandId", brandId);
         return "model";
-    }
-
-    @GetMapping("{modelId}/{brandId}")
-    public String showComplectations(@PathVariable(value = "modelId") Long modelId,
-                                     @PathVariable(value = "brandId") Long brandId,
-                                     org.springframework.ui.Model model) {
-        List<Complectation> complectations = complectationService.getCompByIdOfModel(modelId);
-        ListIterator<Integer> prices = modelComplectationService.getPriceByIdOfModel(modelId).listIterator();
-        model.addAttribute("complectations", complectations);
-        model.addAttribute("prices", prices);
-        model.addAttribute("modelId", modelId);
-        model.addAttribute("brandId", brandId);
-        return "complect";
     }
 
     @GetMapping("new/{brandId}")
@@ -63,45 +49,51 @@ public class ModelController {
         return "newModel";
     }
 
-    @PostMapping("new/{brandId}")
-    public String saveModel(@PathVariable("brandId") Long brandId, Model model) {
-//        if (errors.hasErrors()) {
-//            return null;//Вернуть страницу на, которой не правильно заполнили данные
-//        }
-        model.setBrand(brandService.getBrand(brandId));
-//        model.setBrandId(model.getBrandId());
-        modelService.save(model);
-        return "redirect:/model/" + brandId;
-    }
-
-    @PostMapping("{modelId}/{brandId}")
-    public String addCompToModel(@PathVariable(value = "modelId") Long modelId,
-                                 @PathVariable(value = "brandId") Long brandId,
-                                 @RequestParam(value = "price") int price,
-                                 @RequestParam(value = "name") String name) {
-        modelComplectationService.addComplect(name, price, modelId);
-        return "redirect:/model/" + modelId + "/" + brandId;
-    }
-
-    @PutMapping("{id}")
+    @GetMapping("renewed/{id}")
     public String updateModel(@PathVariable("id") Long modelId, org.springframework.ui.Model model) {
-        Model modelEntity = modelService.getModel(modelId);
-        model.addAttribute("modelEntity", modelEntity);
+        Model modelEntity = modelService.findById(modelId).get();
+        model.addAttribute("model", modelEntity);
 
-        return "updateModel";
+        return "changeModel";
     }
 
-    @PutMapping("change")
-    public String changeData(Model model) {
-        modelService.updateModel(model);
+    @PutMapping("renewed")
+    public String changeData(
+            @Valid Model model,
+            BindingResult bindingResult,
+            org.springframework.ui.Model uiModel
+    ) {
+        if (bindingResult.hasErrors()) {
+            uiModel.addAttribute("model", model);
+            return "changeModel";
+        } else {
+            modelService.updateModel(model);
+            return "redirect:" + model.getBrand().getId();
+        }
+    }
 
-        return "redirect:" + model.getBrand().getId();
+    @PostMapping("new/{brandId}")
+    public String createModel(
+            @Valid Model model,
+            BindingResult bindingResult,
+            org.springframework.ui.Model uiModel,
+            @PathVariable("brandId") Long brandId
+    ) {
+        if (bindingResult.hasErrors()) {
+            uiModel.addAttribute("model", model);
+            uiModel.addAttribute("brandId", brandId);
+            return "newModel";
+        } else {
+            model.setBrand(brandService.findById(brandId).get());
+            modelService.save(model);
+            return "redirect:/model/" + brandId;
+        }
     }
 
     @DeleteMapping("{id}")
     public String deleteModel(@PathVariable("id") Long modelId) {
-        Long brandId = modelService.getModel(modelId).getBrand().getId();
-        modelService.deleteModel(modelId);
+        Long brandId = modelService.findById(modelId).get().getBrand().getId();
+        modelService.deleteModelById(modelId);
         return "redirect:/model/" + brandId;
     }
 }

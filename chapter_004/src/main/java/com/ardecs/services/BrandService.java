@@ -1,4 +1,4 @@
-package com.ardecs.service;
+package com.ardecs.services;
 
 import com.ardecs.car_configurator.entities.Brand;
 import com.ardecs.repositories.BrandRepository;
@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Marat Yanbaev (yanbaevms@gmail.com)
@@ -17,10 +18,8 @@ public class BrandService {
     @Autowired
     BrandRepository brandRepository;
 
-    public Brand getBrand(Long id) {
-        return brandRepository
-                .findById(id)
-                .get();
+    public Optional<Brand> findById(Long id) {
+        return brandRepository.findById(id);
     }
 
     public List<Brand> getBrands() {

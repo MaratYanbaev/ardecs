@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Модели</title>
+    <title>Complectations</title>
     <style>
         .container {
             width: inherit;
@@ -26,11 +26,6 @@
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-        }
-
-        .price {
-            float: left;
-            margin-left: 10px;
         }
 
         tr {
@@ -59,7 +54,7 @@
     <div class="card">
         <div class="tools">
             <div>
-                <a th:href="@{/complect/new/{modelId}/{brandId}(modelId=${modelId},brandId=${brandId})}">
+                <a th:href="@{/modComp/}">
                     <img src="http://localhost:63342/junior/chapter_004/static/images/add.png">
                 </a>
             </div>
@@ -81,20 +76,12 @@
                         <span>[[${prices.next()}]]</span>
                     </td>
                     <td>
-                        <a type="image" th:href="@{/complect/{id}(id=${complect.compId})}">
+                        <a type="image" th:href="@{/modComp/allStuff/{compId}(compId=${complect.id} )}">
                             <img src="http://localhost:63342/junior/chapter_004/static/images/view.png"/>
                         </a>
                     </td>
                     <td>
-                        <form th:action="@{/model/{id}(id=${complect.compId})}"
-                              th:method="put">
-                            <input type="image"
-                                   src="http://localhost:63342/junior/chapter_004/static/images/fix.png"
-                            />
-                        </form>
-                    </td>
-                    <td>
-                        <form th:action="@{/model/{brandId}(brandId=${brandId})}"
+                        <form th:action="@{/modComp/{compId}(compId=${complect.id})}"
                               th:method="delete">
                             <input type="image"
                                    src="http://localhost:63342/junior/chapter_004/static/images/delete.png">

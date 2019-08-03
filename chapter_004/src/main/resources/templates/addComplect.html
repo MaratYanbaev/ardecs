@@ -1,83 +1,63 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Добавить новую модель</title>
-    <style>
-        .container {
-            width: inherit;
-            padding-right: 15px;
-            padding-left: 15px;
-            margin-right: auto;
-            margin-left: auto
-        }
-
-        .card {
-            position: relative;
-            background-color: #fff;
-            background-clip: border-box;
-            border: 1px solid rgba(0, 0, 0, .125);
-            border-radius: .25rem;
-            width: 50%
-        }
-
-        p {
-            border: 1px solid rgba(0, 0, 0, .125);
-            border-radius: .25rem;
-            width: 100%;
-            margin-left: 10%;
-            background: cornsilk;
-        }
-
-        .tools {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-        }
-
-        .put {
-            margin-right: 20px;
-            margin-top: 10px;
-        }
-    </style>
+    <title>Add complectation</title>
+    <link rel="stylesheet" type="text/css"
+          href="http://localhost:63342/junior/chapter_004/static/css/registration.css"/>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
+
+<a th:href="@{/modComp/{modelId}/{brandId}(modelId=${modelId},brandId=${brandId})}">
+    <button class="btn btn-md btn-warning btn-block" type="Submit">Go back.</button>
+</a>
+
 <div class="container">
-    <div class="card">
-        <div class="tools">
-            <div style="width: 50%">
-                <p>Добавить новую комплектацию.</p>
-            </div>
-            <div>
-                <a th:href="@{/model/{modelId}/{brandId}(modelId=${modelId},brandId=${brandId})}">
-                    <img src="http://localhost:63342/junior/chapter_004/static/images/back.png">
-                </a>
-            </div>
-        </div>
-        <div>
-            <form th:object="${complect}"
-                  th:action="@{/model/{modelId}/{brandId}(modelId=${modelId},brandId=${brandId})}"
-                  method="post">
-                <div>
-                    <div style="margin-left: 5%; margin-top: 10px; margin-bottom: 10px;">
-                        <label style="margin-right: 10px" for="modelId">Название комплектации:</label>
-                        <input list="list" type="text" id="modelId" th:name="name" placeholder="Название комплектации">
-                        <datalist id="list">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <form autocomplete="off" th:object="${model}"
+                  action="#" th:action="@{/modComp/}"
+                  method="post" class="form-horizontal">
+                <h2>Add complectation</h2>
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <select th:field="*{name}" class="form-control">
                             <option th:each="complect : ${complectations}"
-                                    th:value="${complect.name}"></option>
-                        </datalist>
-                    </div>
-                    <div style="margin-left: 5%; margin-top: 10px; margin-bottom: 10px;">
-                        <label style="margin-right: 10px" for="price">Стоимость комплектации:</label>
-                        <input type="text" id="price" th:name="price" placeholder="Стоимость комплектации">
-                    </div>
-                    <div>
-                        <input class="put" type="submit" value="Записать"/>
+                                    th:value="${complect.name}"
+                                    th:text="${complect.name}">
+                            </option>
+                        </select>
+                        <label th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                               class="validation-message"></label>
                     </div>
                 </div>
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{price}"
+                               placeholder="Price" class="form-control"/>
+                        <label th:if="${#fields.hasErrors('price')}"
+                               th:errors="*{price}"
+                               class="validation-message">
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <button type="submit" class="btn btn-primary btn-block">
+                            Add
+                        </button>
+                    </div>
+                </div>
+
+                <span th:utext="${successMessage}"></span>
+
             </form>
         </div>
     </div>
 </div>
+
 </body>
 </html>

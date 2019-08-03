@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Accessory_Engine_Color</title>
+    <style>
+        .container {
+            width: inherit;
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        .card {
+            background-color: #fff;
+            background-clip: border-box;
+            border: 1px solid rgba(0, 0, 0, .125);
+            border-radius: .25rem;
+            width: max-content;
+        }
+
+        tr {
+            height: 40px;
+        }
+
+        img {
+            vertical-align: bottom;
+        }
+
+        span {
+            vertical-align: super;
+            font-size: larger;
+        }
+
+        td {
+            width: 150px;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card" style="margin-left: auto;margin-right: auto;">
+        <div>
+            <a th:href="@{/modComp/{mId}/{bId}(mId=${modelId},bId=${brandId})}">
+                <img src="http://localhost:63342/junior/chapter_004/static/images/back.png">
+            </a>
+        </div>
+        <div style="width: 100%">
+            <table>
+                <tbody style="background: lightgoldenrodyellow">
+                <tr th:each="accessoryModCom : ${accessoryModComList}">
+                    <td>
+                        <span>[[${accessoryModCom.accessory.name}]]</span>
+                    </td>
+                    <td>
+                        <img src="http://localhost:63342/junior/chapter_004/static/images/price.png">
+                        <span>[[${accessoryModCom.price}]]</span>
+                    </td>
+                    <td>
+                        <form th:action="@{/modComp/accessory}"
+                              action="#"
+                              th:method="delete">
+                            <input type="image"
+                                   src="http://localhost:63342/junior/chapter_004/static/images/delete.png">
+                            <input type="hidden" th:value="${accessoryModCom.modelComplectation.complectation.id}"
+                                   name="compId">
+                            <input type="hidden" th:value="${accessoryModCom.accessory.id}" name="accessorId">
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div>
+                <form th:action="@{/modComp/accessory}"
+                      method="post"
+                      th:object="${accessoryModCom}">
+                    <div>
+                        <div style="margin-left: 5%; margin-top: 10px; margin-bottom: 10px;">
+                            <label style="margin-right: 10px">Choose accessory:</label>
+                            <select th:name="accessorId">
+                                <option th:each="accessory : ${accessories}"
+                                        th:value="${accessory.id}"
+                                        th:text="${accessory.name}">
+                                </option>
+                            </select>
+                        </div>
+                        <div style="margin-left: 5%; margin-top: 10px; margin-bottom: 10px;">
+                            <label style="margin-right:10px">Set price:</label>
+                            <input style="width: 205px" type="text" th:field="*{price}"
+                                   placeholder="Price of accessory">
+                            <input type="hidden" th:value="${compId}" name="compId">
+                            <label th:if="${#fields.hasErrors('price')}"
+                                   th:errors="*{price}">
+                            </label>
+                        </div>
+                        <div style="margin-left: 3px">
+                            <input class="put" type="submit" value="Save"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div style="width: 100%">
+            <table>
+                <tbody style="background: lightgoldenrodyellow">
+                <tr th:each="engineModCom : ${engineModComList}">
+                    <td>
+                        <span>[[${engineModCom.engine.name}]]</span>
+                    </td>
+                    <td>
+                        <img src="http://localhost:63342/junior/chapter_004/static/images/price.png">
+                        <span>[[${engineModCom.price}]]</span>
+                    </td>
+                    <td>
+                        <form th:action="@{/modComp/engine}"
+                              action="#"
+                              th:method="delete">
+                            <input type="image"
+                                   src="http://localhost:63342/junior/chapter_004/static/images/delete.png">
+                            <input type="hidden" th:value="${engineModCom.modelComplectation.complectation.id}"
+                                   name="compId">
+                            <input type="hidden" th:value="${engineModCom.engine.id}" name="engineId">
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div>
+                <form th:action="@{/modComp/engine}"
+                      method="post"
+                      th:object="${engineModCom}">
+                    <div>
+                        <div style="margin-left: 5%; margin-top: 10px; margin-bottom: 10px;">
+                            <label style="margin-right: 10px">Choose engine:</label>
+                            <select th:name="engineId">
+                                <option th:each="engine : ${engines}"
+                                        th:value="${engine.id}"
+                                        th:text="${engine.name}">
+                                </option>
+                            </select>
+                        </div>
+                        <div style="margin-left: 5%; margin-top: 10px; margin-bottom: 10px;">
+                            <label style="margin-right:10px">Set price:</label>
+                            <input style="width: 205px" type="text" th:field="*{price}" placeholder="Price of engine">
+                            <input type="hidden" th:value="${compId}" name="compId">
+                            <label th:if="${#fields.hasErrors('price')}"
+                                   th:errors="*{price}">
+                            </label>
+                        </div>
+                        <div style="margin-left: 3px">
+                            <input class="put" type="submit" value="Save"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div style="width: 100%">
+            <table>
+                <tbody style="background: lightgoldenrodyellow">
+                <tr th:each="colorModCom : ${colorModComList}">
+                    <td>
+                        <span>[[${colorModCom.color.name}]]</span>
+                    </td>
+                    <td>
+                        <img src="http://localhost:63342/junior/chapter_004/static/images/price.png">
+                        <span>[[${colorModCom.price}]]</span>
+                    </td>
+                    <td>
+                        <form th:action="@{/modComp/color}"
+                              action="#"
+                              th:method="delete">
+                            <input type="image"
+                                   src="http://localhost:63342/junior/chapter_004/static/images/delete.png">
+                            <input type="hidden" th:value="${colorModCom.modelComplectation.complectation.id}"
+                                   name="compId">
+                            <input type="hidden" th:value="${colorModCom.color.id}" name="colorId">
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div>
+                <form th:action="@{/modComp/color}"
+                      th:object="${colorModCom}"
+                      method="post">
+                    <div>
+                        <div style="margin-left: 5%; margin-top: 10px; margin-bottom: 10px;">
+                            <label style="margin-right: 10px">Choose color:</label>
+                            <select th:name="colorId">
+                                <option th:each="color : ${colors}"
+                                        th:value="${color.id}"
+                                        th:text="${color.name}">
+                                </option>
+                            </select>
+                        </div>
+                        <div style="margin-left: 5%; margin-top: 10px; margin-bottom: 10px;">
+                            <label style="margin-right:10px">Set price:</label>
+                            <input style="width: 205px" type="text" th:field="*{price}" placeholder="Price of color">
+                            <input type="hidden" th:value="${compId}"
+                                   name="compId">
+                            <label th:if="${#fields.hasErrors('price')}"
+                                   th:errors="*{price}">
+                            </label>
+                        </div>
+                        <div style="margin-left: 3px">
+                            <input class="put" type="submit" value="Save"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,5 +1,7 @@
 package com.ardecs.car_configurator.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -13,6 +15,7 @@ public class Accessory {
 
     private Long id;
     private String name;
+    @JsonBackReference
     private Set<AccessoryModCom> accessoryModComSet;
 
     @Id
