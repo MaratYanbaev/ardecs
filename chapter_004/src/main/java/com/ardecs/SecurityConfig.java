@@ -1,7 +1,6 @@
 package com.ardecs;
 
 import com.ardecs.myAccessDeniedHandler.MyAccessDeniedHandler;
-import com.ardecs.myEntryPoint.CommenceEntryPoint;
 import com.ardecs.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -70,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/brand/list")
+//                .defaultSuccessUrl("/brand/list")
                 .permitAll();
 
         http.logout()
@@ -80,7 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login?logout")
                 .permitAll();
 
-        http.exceptionHandling().accessDeniedHandler(new MyAccessDeniedHandler())
-        .and().exceptionHandling().authenticationEntryPoint(new CommenceEntryPoint());
+        http.exceptionHandling().accessDeniedHandler(new MyAccessDeniedHandler());
+//        .and().exceptionHandling().authenticationEntryPoint(new CommenceEntryPoint());
     }
 }

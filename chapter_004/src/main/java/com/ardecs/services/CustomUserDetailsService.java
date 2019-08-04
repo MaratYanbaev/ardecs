@@ -35,10 +35,10 @@ public class CustomUserDetailsService implements UserService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByName(username);
-        if (user != null) {
-            return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(), getAuthorities(user));
+        if (user == null) {
+            throw new UsernameNotFoundException(username);
         }
-        return null;
+        return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(), getAuthorities(user));
     }
 
     public User saveUser(User user, String[] roles) {
