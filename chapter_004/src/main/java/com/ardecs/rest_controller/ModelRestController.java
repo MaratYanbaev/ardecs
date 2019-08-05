@@ -38,7 +38,7 @@ public class ModelRestController {
     @Autowired
     ModelComplectationService modelComplectationService;
 
-    @GetMapping(value = "{brandId}")
+    @GetMapping(value = "models/{brandId}")
     public Set<Model> getModels(@PathVariable("brandId") Long brandId) throws ResourceNotFoundException {
         Brand brand = brandService.findById(brandId).orElseThrow(() -> new ResourceNotFoundException("Brand not found for this id :: " + brandId));
         return brand.getModelSet();
