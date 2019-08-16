@@ -59,11 +59,7 @@ public class ModCompController {
 
     @GetMapping
     public String addComplect(Model model) {
-        List<Complectation> complectations = complectationService.getAllComplectation();
-        model.addAttribute("complectations", complectations);
-        model.addAttribute("model", new com.ardecs.car_configurator.entities.Model());
-        model.addAttribute("modelId", modelId);
-        model.addAttribute("brandId", brandId);
+        addComplect(model, new com.ardecs.car_configurator.entities.Model());
         return "addComplect";
     }
 
@@ -88,11 +84,7 @@ public class ModCompController {
                     );
         }
         if (bindingResult.hasErrors()) {
-            List<Complectation> complectations = complectationService.getAllComplectation();
-            model.addAttribute("complectations", complectations);
-            model.addAttribute("model", myModel);
-            model.addAttribute("modelId", modelId);
-            model.addAttribute("brandId", brandId);
+            addComplect(model, myModel);
             return "addComplect";
         } else {
             modelComplectationService.addComplect(myModel.getName(), myModel.getPrice(), modelId);
@@ -201,6 +193,14 @@ public class ModCompController {
         List<Color> colors = colorService.findAll();
         model.addAttribute("colors", colors);
         model.addAttribute("compId", compId);
+        model.addAttribute("modelId", modelId);
+        model.addAttribute("brandId", brandId);
+    }
+
+    private void addComplect(Model model, com.ardecs.car_configurator.entities.Model myModel) {
+        List<Complectation> complectations = complectationService.getAllComplectation();
+        model.addAttribute("complectations", complectations);
+        model.addAttribute("model", myModel);
         model.addAttribute("modelId", modelId);
         model.addAttribute("brandId", brandId);
     }

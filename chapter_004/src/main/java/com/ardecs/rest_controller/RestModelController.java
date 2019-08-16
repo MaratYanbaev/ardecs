@@ -11,14 +11,12 @@ import com.ardecs.services.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -26,8 +24,8 @@ import java.util.stream.Collectors;
  * @since 29.07.2019
  */
 @RestController
-@RequestMapping(value = "/restModel/", headers = {"Accept=application/json"})
-public class ModelRestController {
+@RequestMapping("/restModel")
+public class RestModelController {
 
     @Autowired
     ModelService modelService;
@@ -38,55 +36,53 @@ public class ModelRestController {
     @Autowired
     ModelComplectationService modelComplectationService;
 
-    @GetMapping(value = "models/{brandId}")
-    public Set<Model> getModels(@PathVariable("brandId") Long brandId) throws ResourceNotFoundException {
-        Brand brand = brandService.findById(brandId).orElseThrow(() -> new ResourceNotFoundException("Brand not found for this id :: " + brandId));
-        return brand.getModelSet();
+    @GetMapping("/models/{brandId}")
+    public Brand getModels(@PathVariable("brandId") Long brandId) throws ResourceNotFoundException {
+        return brandService.findById(brandId).orElseThrow(() -> new ResourceNotFoundException("Brand not found for this id :: " + brandId));
     }
 
-    @GetMapping(value = "model/{modelId}")
-    public ResponseEntity<Model> getModel(@PathVariable("modelId") Long modelId) throws ResourceNotFoundException {
-        Model model = modelService.findById(modelId).orElseThrow(() -> new ResourceNotFoundException("Model not found for this id :: " + modelId));
-        return ResponseEntity.ok().body(model);
+    @GetMapping("/model/{modelId}")
+    public Model getModel(@PathVariable("modelId") Long modelId) throws ResourceNotFoundException {
+        return modelService.findById(modelId).orElseThrow(() -> new ResourceNotFoundException("Model not found for this id :: " + modelId));
     }
 
-    @PutMapping("{modelId}")
+    @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void changeData(
-            @Valid Model model,
-            BindingResult bindingResult,
-            @PathVariable("modelId") Long modelId
+            @RequestBody @Valid Model model,
+            BindingResult bindingResult
     ) throws ResourceNotFoundException, InvalidInputException {
         if (bindingResult.hasErrors()) {
-            throwException(bindingResult);
+            throwInvalidInputException(bindingResult);
         }
-        modelService.findById(modelId).orElseThrow(() -> new ResourceNotFoundException("Model is updated, not found for this id :: " + modelId));
+        Long modelId = model.getId();
+        modelService.findById(modelId).orElseThrow(() -> new ResourceNotFoundException("Model needs to update, not found for this id :: " + modelId));
         modelService.updateModel(model);
     }
 
-    @PostMapping("{brandId}")
+    @PostMapping("/{brandId}")
     @ResponseStatus(HttpStatus.CREATED)
     public Model createModel(
-            @Valid Model model,
+            @RequestBody Model model,
             BindingResult bindingResult,
             @PathVariable("brandId") Long brandId
     ) throws ResourceNotFoundException, InvalidInputException {
         if (bindingResult.hasErrors()) {
-            throwException(bindingResult);
+            throwInvalidInputException(bindingResult);
         }
         Brand brand = brandService.findById(brandId).orElseThrow(() -> new ResourceNotFoundException("Brand not found for this id :: " + brandId));
         model.setBrand(brand);
         return modelService.save(model);
     }
 
-    @DeleteMapping("{modelId}")
+    @DeleteMapping("/{modelId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteModel(@PathVariable("modelId") Long modelId) throws ResourceNotFoundException {
         Model model = modelService.findById(modelId).orElseThrow(() -> new ResourceNotFoundException("Model not found for this id :: " + modelId));
         modelService.deleteByModel(model);
     }
 
-    private void throwException(BindingResult bindingResult) throws InvalidInputException {
+    private void throwInvalidInputException(BindingResult bindingResult) throws InvalidInputException {
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
         String errors = fieldErrors.stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)

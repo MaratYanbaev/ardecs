@@ -3,7 +3,6 @@ package com.ardecs.car_configurator.entities;
 import com.ardecs.car_configurator.compositeId.EngineModComId;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -23,7 +22,6 @@ public class EngineModCom {
     private Integer price;
     @JsonIgnore
     private EngineModComId engineModComId;
-    @JsonManagedReference
     private Engine engine;
     @JsonBackReference
     private ModelComplectation modelComplectation;

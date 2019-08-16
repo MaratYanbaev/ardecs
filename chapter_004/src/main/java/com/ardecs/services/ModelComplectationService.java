@@ -45,7 +45,6 @@ public class ModelComplectationService {
 
     public boolean existComplectation(Long modelId, String complectation) {
         Long compId = complectationRepository.findIdByNameOfComplect(complectation);
-        ModelComplectation modelComplectation = modelComplectationRepository.existComplectation(modelId, compId);
         return modelComplectationRepository.existComplectation(modelId, compId) == null;
     }
 }

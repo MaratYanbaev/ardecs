@@ -45,7 +45,8 @@
                                 multiple="multiple" size="2">
                             <option th:each="role : ${authorities}"
                                     th:value="${role.name}"
-                                    th:text="${role.name}">
+                                    th:text="${role.name}"
+                                    th:selected="${role.name}==VIEWER">
                             </option>
                         </select>
                     </div>

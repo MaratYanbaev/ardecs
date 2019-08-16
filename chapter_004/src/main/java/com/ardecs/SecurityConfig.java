@@ -1,11 +1,14 @@
 package com.ardecs;
 
+import com.ardecs.jwtToken.JwtTokenProvider;
 import com.ardecs.myAccessDeniedHandler.MyAccessDeniedHandler;
-import com.ardecs.services.UserService;
+import com.ardecs.myEntryPoint.CommenceEntryPoint;
+import com.ardecs.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -27,18 +30,26 @@ import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserService userDetailsService;
+    private CustomUserDetailsService userDetailsService;
 
-    @Override
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
-
     }
 
     @Bean
-    public SpringSecurityDialect springSecurityDialect(){
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public SpringSecurityDialect springSecurityDialect() {
         return new SpringSecurityDialect();
     }
 
@@ -51,9 +62,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.csrf().disable().authorizeRequests()
-                .antMatchers("/static/**","/swagger-ui.html", "/v2/api-docs/**", "/swagger.json", "/swagger-resources/**", "/webjars/**").permitAll()
+                .antMatchers("/static/**", "/swagger-ui.html", "/v2/api-docs/**", "/swagger.json", "/swagger-resources/**", "/webjars/**", "/restLogin/**").permitAll()
 
-                .antMatchers(HttpMethod.GET, "/restModel/**", "/brand/**", "/models/**","/model/**", "/complect/**", "/modComp/**", "/registration")
+                .antMatchers(HttpMethod.GET, "/restModel/**", "/brand/**", "/models/**", "/model/**", "/complect/**", "/modComp/**", "/registration")
                 .hasAnyRole("VIEWER", "CREATOR", "UPDATER", "ADMIN")
 
                 .antMatchers(HttpMethod.PUT, "/restModel/**", "/brand/**", "/models/**", "/model/**", "/complect/**", "/modComp/**", "/registration")
@@ -79,7 +90,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login?logout")
                 .permitAll();
 
-        http.exceptionHandling().accessDeniedHandler(new MyAccessDeniedHandler());
-//        .and().exceptionHandling().authenticationEntryPoint(new CommenceEntryPoint());
+        http.exceptionHandling().accessDeniedHandler(new MyAccessDeniedHandler())
+                .and().apply(new JwtConfigurer(jwtTokenProvider))
+                .and().exceptionHandling().authenticationEntryPoint(new CommenceEntryPoint());
     }
 }

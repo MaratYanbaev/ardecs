@@ -8,7 +8,4 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
     User findByName(String name);
-
-    @Override
-    <S extends User> S save(S entity);
 }

@@ -2,11 +2,11 @@ package com.ardecs.controller;
 
 import com.ardecs.car_configurator.entityOfSecurity.Role;
 import com.ardecs.car_configurator.entityOfSecurity.User;
+import com.ardecs.services.CustomUserDetailsService;
 import com.ardecs.services.RoleService;
-import com.ardecs.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Marat Yanbaev (yanbaevms@gmail.com)
@@ -25,10 +27,10 @@ import java.util.List;
 @Slf4j
 @Controller
 @RequestMapping
-public class UserController {
+public class LoginController {
 
     @Autowired
-    UserService userDetailsService;
+    CustomUserDetailsService userDetailsService;
 
     @Autowired
     RoleService roleService;
@@ -40,13 +42,7 @@ public class UserController {
 
     @GetMapping(value = "/registration")
     public ModelAndView registration() {
-        ModelAndView modelAndView = new ModelAndView();
-        User user = new User();
-        List<Role> roles = roleService.getRoles();
-        modelAndView.addObject("authorities", roles);
-        modelAndView.addObject("user", user);
-        modelAndView.setViewName("registration");
-        return modelAndView;
+        return setUpRegPage(new ModelAndView(), new User());
     }
 
     @PostMapping(value = "/registration")
@@ -54,24 +50,30 @@ public class UserController {
             @Valid User user,
             BindingResult bindingResult,
             @RequestParam(name = "role") String[] role) {
-        ModelAndView modelAndView = new ModelAndView();
-        UserDetails userExists = userDetailsService.loadUserByUsername(user.getName());
-        if (userExists != null) {
-            bindingResult
-                    .rejectValue("name", "error.user",
-                            "A user registered with this name provided already exist.");
+        try {
+            if (userDetailsService.loadUserByUsername(user.getName()) != null) {
+                bindingResult
+                        .rejectValue("name", "error.user",
+                                "A user registered with this name provided already exist.");
+            }
+        } catch (UsernameNotFoundException e) {
+            e.printStackTrace();
         }
         if (bindingResult.hasErrors()) {
-            List<Role> roles = roleService.getRoles();
-            modelAndView.addObject("authorities", roles);
-            modelAndView.addObject("user", user);
-            modelAndView.setViewName("registration");
+            return setUpRegPage(new ModelAndView(), user);
         } else {
-            userDetailsService.saveUser(user, role);
-            modelAndView.addObject("successMessage", "User has been registered successfully");
-            modelAndView.addObject("user", new User());
-            modelAndView.setViewName("registration");
+            List<Role> roles = Arrays.stream(role).map(Role::new).collect(Collectors.toList());
+            user.setRoles(roles);
+            userDetailsService.save(user);
+            return setUpRegPage(new ModelAndView().addObject("successMessage", "User has been registered successfully"), new User());
         }
+    }
+
+    private ModelAndView setUpRegPage(ModelAndView modelAndView, User user) {
+        List<Role> roles = roleService.getRoles();
+        modelAndView.addObject("authorities", roles);
+        modelAndView.addObject("user", user);
+        modelAndView.setViewName("registration");
         return modelAndView;
     }
 }

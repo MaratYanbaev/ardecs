@@ -26,10 +26,6 @@ public class ComplectationService {
         return complectationRepository.getCompByIdOfBrand(brandId);
     }
 
-    public Long findIdByNameOfComplect(String name) {
-        return complectationRepository.findIdByNameOfComplect(name);
-    }
-
     public List<Complectation> getAllComplectation() {
         return complectationRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
     }

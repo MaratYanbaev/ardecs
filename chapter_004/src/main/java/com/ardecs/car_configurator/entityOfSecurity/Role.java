@@ -1,7 +1,10 @@
 package com.ardecs.car_configurator.entityOfSecurity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -11,7 +14,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "roles")
-public class Role {
+public class Role implements Serializable {
 
     @Id
     @Column(name = "name", nullable = false, unique = true)
@@ -19,6 +22,7 @@ public class Role {
     private String name;
 
     @ManyToMany(mappedBy = "roles")
+    @JsonBackReference
     private List<User> users;
 
     public Role() {

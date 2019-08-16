@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,20 +13,21 @@ import java.util.List;
  */
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
 
     @Id
     @Column(nullable = false, unique = true)
     @Size(max = 16)
     @NotEmpty(message = "*Please provide your name")
-    @Pattern(regexp = "[a-zA-Z]+", message = "The name must contains only letters.")
+    @Pattern(regexp = "[a-zA-Z]+", message = "*The name must contains only letters.")
     private String name;
 
     @Column(nullable = false, unique = true)
     @NotEmpty(message = "*Please provide your password")
-    @Size(min = 4, message = "Password length must be more than 4 characters")
+    @Size(min = 4, message = "*Password length must be more than 4 characters")
     private String password;
 
+//    @NotEmpty(message = "*Please provide some Role: ADMIN; CREATOR; UPDATER; VIEWER.")
     @ManyToMany
     @JoinTable(
             name = "user_role",

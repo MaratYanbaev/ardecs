@@ -42,7 +42,7 @@ public class ModelEntityTest {
 
     @Test
     public void testSaveModel() {
-        Brand brandEntity = brandRepository.findId(5L);
+        Brand brandEntity = brandRepository.getOne(5L);
         Model model = new Model();
         model.setBrand(brandEntity);
         model.setName("Hilux");

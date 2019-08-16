@@ -18,7 +18,13 @@ public class MyAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response,
                        AccessDeniedException accessDeniedException) throws IOException,
             ServletException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/myError");
+        RequestDispatcher dispatcher;
+        String requestedUri = request.getRequestURI();
+        if (requestedUri.contains("rest")) {
+            dispatcher = request.getRequestDispatcher("/myRestError");
+        } else {
+            dispatcher = request.getRequestDispatcher("/myError");
+        }
         dispatcher.forward(request, response);
     }
 }

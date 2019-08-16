@@ -1,12 +1,9 @@
 package com.ardecs.car_configurator.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -15,14 +12,13 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "brand")
-public class Brand implements Serializable {
+public class Brand {
 
     private Long id;
     @Size(max = 16)
     @NotEmpty(message = "*Please provide name")
     @Pattern(regexp = "[a-zA-Z]+", message = "The name must contains only letters.")
     private String name;
-    @JsonManagedReference
     private Set<Model> modelSet;
 
     @Id

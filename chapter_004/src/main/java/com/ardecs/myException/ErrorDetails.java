@@ -1,5 +1,7 @@
 package com.ardecs.myException;
 
+import com.fasterxml.jackson.databind.util.StdDateFormat;
+
 import java.util.Date;
 
 /**
@@ -9,19 +11,18 @@ import java.util.Date;
  * My error response structure.
  */
 public class ErrorDetails {
-    private Date timestamp;
+    private String time;
     private String message;
     private String details;
 
     public ErrorDetails(Date timestamp, String message, String details) {
-        super();
-        this.timestamp = timestamp;
+        this.time = new StdDateFormat().format(timestamp);
         this.message = message;
         this.details = details;
     }
 
-    public Date getTimestamp() {
-        return timestamp;
+    public String getTimestamp() {
+        return time;
     }
 
     public String getMessage() {

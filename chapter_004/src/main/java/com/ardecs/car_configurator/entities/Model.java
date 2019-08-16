@@ -1,7 +1,6 @@
 package com.ardecs.car_configurator.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Range;
 
@@ -10,7 +9,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -19,7 +17,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "model")
-public class Model implements Serializable {
+public class Model {
 
     private Long id;
     @NotNull(message = "*Please provide price")
@@ -31,7 +29,6 @@ public class Model implements Serializable {
     private String name;
     @JsonBackReference
     private Brand brand;
-    @JsonManagedReference
     private Set<ModelComplectation> modelComplectationSet;
 
     @Id

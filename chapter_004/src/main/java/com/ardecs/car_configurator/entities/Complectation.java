@@ -17,14 +17,6 @@ public class Complectation {
     @JsonBackReference
     private Set<ModelComplectation> modelComplectationSet;
 
-    public Complectation() {
-    }
-
-    public Complectation(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)

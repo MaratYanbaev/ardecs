@@ -3,7 +3,6 @@ package com.ardecs.car_configurator.entities;
 import com.ardecs.car_configurator.compositeId.ModelCompId;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -22,13 +21,9 @@ public class ModelComplectation {
     private ModelCompId id;
     @JsonBackReference
     private Model model;
-    @JsonManagedReference
     private Complectation complectation;
-    @JsonManagedReference
     private Set<ColorModCom> colorModComSet;
-    @JsonManagedReference
     private Set<EngineModCom> engineModComSet;
-    @JsonManagedReference
     private Set<AccessoryModCom> accessoryModComSet;
 
     @EmbeddedId

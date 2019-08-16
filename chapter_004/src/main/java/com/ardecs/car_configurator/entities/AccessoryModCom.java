@@ -3,7 +3,6 @@ package com.ardecs.car_configurator.entities;
 import com.ardecs.car_configurator.compositeId.AccessoryModComId;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -23,7 +22,7 @@ public class AccessoryModCom {
     private Integer price;
     @JsonIgnore
     private AccessoryModComId accessoryModComId;
-    @JsonManagedReference
+//    @JsonManagedReference
     private Accessory accessory;
     @JsonBackReference
     private ModelComplectation modelComplectation;
