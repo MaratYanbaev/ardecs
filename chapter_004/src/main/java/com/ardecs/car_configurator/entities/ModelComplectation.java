@@ -35,7 +35,7 @@ public class ModelComplectation {
         this.id = id;
     }
 
-    @OneToMany(mappedBy = "modelComplectation")
+    @OneToMany(mappedBy = "modelComplectation", cascade = CascadeType.ALL)
     public Set<ColorModCom> getColorModComSet() {
         return colorModComSet;
     }
@@ -44,7 +44,7 @@ public class ModelComplectation {
         this.colorModComSet = colorModComSet;
     }
 
-    @OneToMany(mappedBy = "modelComplectation")
+    @OneToMany(mappedBy = "modelComplectation", cascade = CascadeType.ALL)
     public Set<AccessoryModCom> getAccessoryModComSet() {
         return accessoryModComSet;
     }
@@ -53,7 +53,7 @@ public class ModelComplectation {
         this.accessoryModComSet = accessoryModComSet;
     }
 
-    @OneToMany(mappedBy = "modelComplectation")
+    @OneToMany(mappedBy = "modelComplectation", cascade = CascadeType.ALL)
     public Set<EngineModCom> getEngineModComSet() {
         return engineModComSet;
     }

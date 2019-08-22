@@ -23,12 +23,6 @@ public class ModelService {
         return modelRepository.findById(id);
     }
 
-    public Model getModel(Long id) {
-        return modelRepository
-                .findById(id)
-                .get();
-    }
-
     public Model save(Model model) {
         return modelRepository.save(model);
     }
@@ -47,5 +41,9 @@ public class ModelService {
 
     public void deleteModelById(Long id) {
         modelRepository.deleteById(id);
+    }
+
+    public boolean findByName(String name) {
+        return modelRepository.findByName(name) != null;
     }
 }
