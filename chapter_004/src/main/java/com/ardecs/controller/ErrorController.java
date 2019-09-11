@@ -23,21 +23,24 @@ public class ErrorController {
     public String methodDeleteNotAllowed(Model model, HttpServletRequest request) {
         String url = getPath(request);
         model.addAttribute("url", url);
-        return "deleteError";
+        model.addAttribute("message", "You are not authorized to DELETE data!");
+        return "forbiddenPage";
     }
 
     @PutMapping
     public String methodPutNotAllowed(Model model, HttpServletRequest request) {
         String url = getPath(request);
         model.addAttribute("url", url);
-        return "putError";
+        model.addAttribute("message", "You are not authorized to CHANGE data!");
+        return "forbiddenPage";
     }
 
     @PostMapping
     public String methodPostNotAllowed(Model model, HttpServletRequest request) {
         String url = getPath(request);
         model.addAttribute("url", url);
-        return "postError";
+        model.addAttribute("message", "You are not authorized to ADD data!");
+        return "forbiddenPage";
     }
 
     private String getPath(HttpServletRequest request) {

@@ -1,4 +1,4 @@
-package com.ardecs;
+package com.ardecs.config;
 
 import com.ardecs.jwtToken.JwtTokenFilter;
 import com.ardecs.jwtToken.JwtTokenProvider;

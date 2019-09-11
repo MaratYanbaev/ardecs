@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Date;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Date;
  * @since 02.08.2019
  */
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class MyExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<?> resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
@@ -37,5 +38,16 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> duplicateNameOfModelException(DuplicateNameOfModelException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<?> entityNotFoundException(WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails
+                (
+                        new Date(),
+                        "Provided name/s of Role doesn't match to one of next: ADMIN; CREATOR; UPDATER; VIEWER.",
+                        request.getDescription(false)
+                );
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 }

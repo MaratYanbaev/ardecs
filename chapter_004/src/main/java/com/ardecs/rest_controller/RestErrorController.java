@@ -14,17 +14,17 @@ import springfox.documentation.annotations.ApiIgnore;
 public class RestErrorController {
 
     @DeleteMapping
-    @ResponseStatus(value = HttpStatus.METHOD_NOT_ALLOWED, reason = "You are not authorized to DELETE data!")
+    @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "You are not authorized to DELETE data!")
     public void methodDeleteNotAllowed() {
     }
 
     @PutMapping
-    @ResponseStatus(value = HttpStatus.METHOD_NOT_ALLOWED, reason = "You are not authorized to UPDATE data!")
+    @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "You are not authorized to UPDATE data!")
     public void methodPutNotAllowed() {
     }
 
     @PostMapping
-    @ResponseStatus(value = HttpStatus.METHOD_NOT_ALLOWED, reason = "You are not authorized to CREATE data!")
+    @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "You are not authorized to CREATE data!")
     public void methodPostNotAllowed() {
     }
 }

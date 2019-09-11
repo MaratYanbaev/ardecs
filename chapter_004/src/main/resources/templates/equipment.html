@@ -3,50 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Accessory_Engine_Color</title>
-    <style>
-        .container {
-            width: inherit;
-            padding-right: 15px;
-            padding-left: 15px;
-            margin-right: auto;
-            margin-left: auto;
-        }
-
-        .card {
-            background-color: #fff;
-            background-clip: border-box;
-            border: 1px solid rgba(0, 0, 0, .125);
-            border-radius: .25rem;
-            width: max-content;
-        }
-
-        tr {
-            height: 40px;
-        }
-
-        img {
-            vertical-align: bottom;
-        }
-
-        span {
-            vertical-align: super;
-            font-size: larger;
-        }
-
-        td {
-            width: 150px;
-            vertical-align: middle;
-            text-align: center;
-        }
-
-    </style>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
 </head>
 <body>
 <div class="container">
     <div class="card" style="margin-left: auto;margin-right: auto;">
         <div>
             <a th:href="@{/modComp/{mId}/{bId}(mId=${modelId},bId=${brandId})}">
-                <img src="http://localhost:63342/junior/chapter_004/static/images/back.png">
+                <img th:src="@{/images/back.png}">
             </a>
         </div>
         <div style="width: 100%">
@@ -57,7 +21,7 @@
                         <span>[[${accessoryModCom.accessory.name}]]</span>
                     </td>
                     <td>
-                        <img src="http://localhost:63342/junior/chapter_004/static/images/price.png">
+                        <img th:src="@{/images/price.png}">
                         <span>[[${accessoryModCom.price}]]</span>
                     </td>
                     <td>
@@ -65,7 +29,7 @@
                               action="#"
                               th:method="delete">
                             <input type="image"
-                                   src="http://localhost:63342/junior/chapter_004/static/images/delete.png">
+                                   th:src="@{/images/delete.png}">
                             <input type="hidden" th:value="${accessoryModCom.modelComplectation.complectation.id}"
                                    name="compId">
                             <input type="hidden" th:value="${accessoryModCom.accessory.id}" name="accessorId">
@@ -112,7 +76,7 @@
                         <span>[[${engineModCom.engine.name}]]</span>
                     </td>
                     <td>
-                        <img src="http://localhost:63342/junior/chapter_004/static/images/price.png">
+                        <img th:src="@{/images/price.png}">
                         <span>[[${engineModCom.price}]]</span>
                     </td>
                     <td>
@@ -120,7 +84,7 @@
                               action="#"
                               th:method="delete">
                             <input type="image"
-                                   src="http://localhost:63342/junior/chapter_004/static/images/delete.png">
+                                   th:src="@{/images/delete.png}">
                             <input type="hidden" th:value="${engineModCom.modelComplectation.complectation.id}"
                                    name="compId">
                             <input type="hidden" th:value="${engineModCom.engine.id}" name="engineId">
@@ -166,7 +130,7 @@
                         <span>[[${colorModCom.color.name}]]</span>
                     </td>
                     <td>
-                        <img src="http://localhost:63342/junior/chapter_004/static/images/price.png">
+                        <img th:src="@{/images/price.png}">
                         <span>[[${colorModCom.price}]]</span>
                     </td>
                     <td>
@@ -174,7 +138,7 @@
                               action="#"
                               th:method="delete">
                             <input type="image"
-                                   src="http://localhost:63342/junior/chapter_004/static/images/delete.png">
+                                   th:src="@{/images/delete.png}">
                             <input type="hidden" th:value="${colorModCom.modelComplectation.complectation.id}"
                                    name="compId">
                             <input type="hidden" th:value="${colorModCom.color.id}" name="colorId">

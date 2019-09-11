@@ -3,64 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Complectations</title>
-    <style>
-        .container {
-            width: inherit;
-            padding-right: 15px;
-            padding-left: 15px;
-            margin-right: auto;
-            margin-left: auto;
-            text-align: -moz-center;
-        }
-
-        .card {
-            position: relative;
-            background-color: #fff;
-            background-clip: border-box;
-            border: 1px solid rgba(0, 0, 0, .125);
-            border-radius: .25rem;
-            width: max-content;
-        }
-
-        .tools {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-        }
-
-        tr {
-            height: 40px;
-        }
-
-        img {
-            vertical-align: bottom;
-        }
-
-        span {
-            vertical-align: super;
-            font-size: larger;
-        }
-
-        td {
-            width: 150px;
-            vertical-align: middle;
-            text-align: center;
-        }
-
-    </style>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
 </head>
 <body>
-<div class="container">
-    <div class="card">
+<div class="containerInner">
+    <div class="cardInner">
         <div class="tools">
             <div>
                 <a th:href="@{/modComp/}">
-                    <img src="http://localhost:63342/junior/chapter_004/static/images/add.png">
+                    <img th:src="@{/images/add.png}">
                 </a>
             </div>
             <div>
                 <a th:href="@{/model/{brandId}(brandId=${brandId})}">
-                    <img src="http://localhost:63342/junior/chapter_004/static/images/back.png">
+                    <img th:src="@{/images/back.png}">
                 </a>
             </div>
         </div>
@@ -72,19 +28,19 @@
                         <span>[[${complect.name}]]</span>
                     </td>
                     <td>
-                        <img src="http://localhost:63342/junior/chapter_004/static/images/price.png">
+                        <img th:src="@{/images/price.png}">
                         <span>[[${prices.next()}]]</span>
                     </td>
                     <td>
                         <a type="image" th:href="@{/modComp/allStuff/{compId}(compId=${complect.id} )}">
-                            <img src="http://localhost:63342/junior/chapter_004/static/images/view.png"/>
+                            <img th:src="@{/images/view.png}"/>
                         </a>
                     </td>
                     <td>
                         <form th:action="@{/modComp/{compId}(compId=${complect.id})}"
                               th:method="delete">
                             <input type="image"
-                                   src="http://localhost:63342/junior/chapter_004/static/images/delete.png">
+                                   th:src="@{/images/delete.png}">
                         </form>
                     </td>
                 </tr>
@@ -92,7 +48,6 @@
             </table>
         </div>
     </div>
-</div>
 </div>
 </body>
 </html>

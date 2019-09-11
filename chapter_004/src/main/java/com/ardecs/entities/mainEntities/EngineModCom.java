@@ -1,6 +1,6 @@
-package com.ardecs.car_configurator.entities;
+package com.ardecs.entities.mainEntities;
 
-import com.ardecs.car_configurator.compositeId.ColorModComId;
+import com.ardecs.entities.compositeId.EngineModComId;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -11,28 +11,28 @@ import java.util.Objects;
 
 /**
  * @author Marat Yanbaev (yanbaevms@gmail.com)
- * @since 24.06.2019
+ * @since 23.06.2019
  */
 @Entity
-@Table(name = "color_model_complect")
-public class ColorModCom {
+@Table(name = "engine_model_complect")
+public class EngineModCom {
 
     @NotNull(message = "*Please provide price")
     @Max(value = 1_000_000, message = "*Max value 1_000_000")
     private Integer price;
     @JsonIgnore
-    private ColorModComId colorModComId;
-    private Color color;
+    private EngineModComId engineModComId;
+    private Engine engine;
     @JsonBackReference
     private ModelComplectation modelComplectation;
 
     @EmbeddedId
-    public ColorModComId getColorModComId() {
-        return colorModComId;
+    public EngineModComId getEngineModComId() {
+        return engineModComId;
     }
 
-    public void setColorModComId(ColorModComId colorModComId) {
-        this.colorModComId = colorModComId;
+    public void setEngineModComId(EngineModComId engineModComId) {
+        this.engineModComId = engineModComId;
     }
 
     @Column(name = "price")
@@ -45,21 +45,21 @@ public class ColorModCom {
     }
 
     @ManyToOne
-    @MapsId(value = "colorId")
-    @JoinColumn(name = "color_id", referencedColumnName = "id")
-    public Color getColor() {
-        return color;
+    @MapsId(value = "engineId")
+    @JoinColumn(name = "engine_id", referencedColumnName = "id")
+    public Engine getEngine() {
+        return engine;
     }
 
-    public void setColor(Color color) {
-        this.color = color;
+    public void setEngine(Engine engine) {
+        this.engine = engine;
     }
 
     @ManyToOne
     @MapsId(value = "modelCompId")
     @JoinColumns({
-            @JoinColumn(name = "model_id", referencedColumnName = "model_id"),
-            @JoinColumn(name = "comp_id", referencedColumnName = "comp_id")
+            @JoinColumn(name = "comp_id", referencedColumnName = "comp_id"),
+            @JoinColumn(name = "model_id", referencedColumnName = "model_id")
     })
     public ModelComplectation getModelComplectation() {
         return modelComplectation;
@@ -73,15 +73,15 @@ public class ColorModCom {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ColorModCom that = (ColorModCom) o;
-        return Objects.equals(colorModComId, that.colorModComId) &&
+        EngineModCom that = (EngineModCom) o;
+        return Objects.equals(engineModComId, that.engineModComId) &&
                 Objects.equals(price, that.price) &&
-                Objects.equals(color, that.color) &&
+                Objects.equals(engine, that.engine) &&
                 Objects.equals(modelComplectation, that.modelComplectation);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(colorModComId, price, color, modelComplectation);
+        return Objects.hash(engineModComId, price, engine, modelComplectation);
     }
 }

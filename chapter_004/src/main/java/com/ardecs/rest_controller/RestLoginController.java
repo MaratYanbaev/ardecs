@@ -1,7 +1,6 @@
 package com.ardecs.rest_controller;
 
-import com.ardecs.car_configurator.entityOfSecurity.Role;
-import com.ardecs.car_configurator.entityOfSecurity.User;
+import com.ardecs.entities.entityForSecurity.User;
 import com.ardecs.jwtToken.JwtTokenProvider;
 import com.ardecs.myException.InvalidInputException;
 import com.ardecs.repositories.UserRepository;
@@ -21,7 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -49,7 +51,7 @@ public class RestLoginController {
     @Autowired
     UserRepository userRepository;
 
-    @PostMapping(headers = "Accept=application/json")
+    @PostMapping
     public ResponseEntity login(@RequestBody User user) {
         String username = user.getName();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, user.getPassword()));
@@ -60,7 +62,7 @@ public class RestLoginController {
         return ok(model);
     }
 
-    @PostMapping(value = "/registration", headers = {"Accept=application/json"})
+    @PostMapping(value = "/registration")
     public ResponseEntity createNewUser(
             @RequestBody @Valid User user,
             BindingResult bindingResult
@@ -75,27 +77,26 @@ public class RestLoginController {
         } catch (UsernameNotFoundException e) {
             e.printStackTrace();
         }
-        if (user.getRoles() == null) {
-            bindingResult
-                    .rejectValue("roles", "error.user",
-                            "Please provide some Role: ADMIN; CREATOR; UPDATER; VIEWER.");
-        } else {
-            int i = user.getRoles().size();
-            List<Role> roles = roleService.getRoles();
-            for (Role value : user.getRoles()) {
-                for (Role checkedValue : roles) {
-                    if (checkedValue.getName().equals(value.getName())) {
-                        i--;
-                        break;
-                    }
-                }
-            }
-            if (i != 0) {
-                bindingResult
-                        .rejectValue("roles", "error.user",
-                                "Provided name/s of Role doesn't match to one of next: ADMIN; CREATOR; UPDATER; VIEWER.");
-            }
-        }
+
+//        List<Role> userRoles = user.getRoles();
+//        if (userRoles != null) {
+//            int i = userRoles.size();
+//            List<Role> roles = roleService.getRoles();
+//            for (Role checkedValue : userRoles) {
+//                for (Role value : roles) {
+//                    if (checkedValue.getName().equals(value.getName())) {
+//                        i--;
+//                        break;
+//                    }
+//                }
+//            }
+//            if (i != 0) {
+//                bindingResult
+//                        .rejectValue("roles", "error.user",
+//                                "Provided name/s of Role doesn't match to one of next: ADMIN; CREATOR; UPDATER; VIEWER.");
+//            }
+//        }
+
         if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
             String errors = fieldErrors.stream()
@@ -106,6 +107,7 @@ public class RestLoginController {
             password = user.getPassword();
             userDetailsService.save(user);
         }
+
         user.setPassword(password);
         return ok(user);
     }

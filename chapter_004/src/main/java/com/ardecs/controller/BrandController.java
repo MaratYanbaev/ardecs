@@ -5,7 +5,7 @@ package com.ardecs.controller;
  * @since 04.05.2019
  */
 
-import com.ardecs.car_configurator.entities.Brand;
+import com.ardecs.entities.mainEntities.Brand;
 import com.ardecs.services.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

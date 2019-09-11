@@ -16,7 +16,7 @@ public class UserBean {
         this.tuTu = tuTu;
     }
 
-    public void getTuTu() {
+    public  void getTuTu() {
         System.out.println(tuTu);
     }
 }

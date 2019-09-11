@@ -1,6 +1,6 @@
 package com.ardecs.repositories;
 
-import com.ardecs.car_configurator.entities.Engine;
+import com.ardecs.entities.mainEntities.Engine;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

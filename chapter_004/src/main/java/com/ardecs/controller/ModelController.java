@@ -1,11 +1,10 @@
 package com.ardecs.controller;
 
-import com.ardecs.car_configurator.entities.Model;
+import com.ardecs.entities.mainEntities.Model;
 import com.ardecs.services.BrandService;
 import com.ardecs.services.ComplectationService;
 import com.ardecs.services.ModelComplectationService;
 import com.ardecs.services.ModelService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -19,7 +18,6 @@ import java.util.Set;
  * @since 07.06.2019
  */
 
-@Slf4j
 @Controller
 @RequestMapping("/model/")
 public class ModelController {

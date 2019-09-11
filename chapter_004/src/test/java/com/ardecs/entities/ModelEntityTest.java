@@ -1,7 +1,7 @@
-package com.ardecs.car_configurator;
+package com.ardecs.entities;
 
-import com.ardecs.car_configurator.entities.Brand;
-import com.ardecs.car_configurator.entities.Model;
+import com.ardecs.entities.mainEntities.Brand;
+import com.ardecs.entities.mainEntities.Model;
 import com.ardecs.repositories.BrandRepository;
 import com.ardecs.repositories.ModelRepository;
 import org.junit.Test;

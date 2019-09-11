@@ -1,4 +1,4 @@
-package com.ardecs.car_configurator.entityOfSecurity;
+package com.ardecs.entities.entityForSecurity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 

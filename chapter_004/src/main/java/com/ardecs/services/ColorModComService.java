@@ -1,6 +1,6 @@
 package com.ardecs.services;
 
-import com.ardecs.car_configurator.entities.ColorModCom;
+import com.ardecs.entities.mainEntities.ColorModCom;
 import com.ardecs.repositories.ColorModComRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

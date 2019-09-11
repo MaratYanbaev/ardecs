@@ -1,7 +1,6 @@
 package com.ardecs.repositories;
 
-import com.ardecs.car_configurator.entities.AccessoryModCom;
-import com.ardecs.car_configurator.entities.EngineModCom;
+import com.ardecs.entities.mainEntities.AccessoryModCom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

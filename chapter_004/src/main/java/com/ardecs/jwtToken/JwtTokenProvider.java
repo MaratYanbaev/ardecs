@@ -1,6 +1,6 @@
 package com.ardecs.jwtToken;
 
-import com.ardecs.car_configurator.entityOfSecurity.Role;
+import com.ardecs.entities.entityForSecurity.Role;
 import com.ardecs.myException.ErrorDetails;
 import com.ardecs.services.CustomUserDetailsService;
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -1,7 +1,8 @@
-package com.ardecs.car_configurator.entityOfSecurity;
+package com.ardecs.entities.entityForSecurity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -27,12 +28,12 @@ public class User implements Serializable {
     @Size(min = 4, message = "*Password length must be more than 4 characters")
     private String password;
 
-//    @NotEmpty(message = "*Please provide some Role: ADMIN; CREATOR; UPDATER; VIEWER.")
     @ManyToMany
     @JoinTable(
             name = "user_role",
             joinColumns = {@JoinColumn(name = "user", referencedColumnName = "name")},
             inverseJoinColumns = {@JoinColumn(name = "role", referencedColumnName = "name")})
+    @NotNull(message = "*Please provide some Role: ADMIN; CREATOR; UPDATER; VIEWER.")
     private List<Role> roles;
 
     public User() {

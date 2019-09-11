@@ -1,7 +1,7 @@
 package com.ardecs.rest_controller;
 
-import com.ardecs.car_configurator.entities.Brand;
-import com.ardecs.car_configurator.entities.Model;
+import com.ardecs.entities.mainEntities.Brand;
+import com.ardecs.entities.mainEntities.Model;
 import com.ardecs.myException.DuplicateNameOfModelException;
 import com.ardecs.myException.InvalidInputException;
 import com.ardecs.myException.ResourceNotFoundException;

@@ -1,4 +1,4 @@
-package com.ardecs;
+package com.ardecs.config;
 
 import com.ardecs.jwtToken.JwtTokenProvider;
 import com.ardecs.myAccessDeniedHandler.MyAccessDeniedHandler;
@@ -15,7 +15,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 
 //import com.ardecs.myEntryPoint.CommenceEntryPoint;
 
@@ -49,11 +48,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public SpringSecurityDialect springSecurityDialect() {
-        return new SpringSecurityDialect();
-    }
-
-    @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -62,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.csrf().disable().authorizeRequests()
-                .antMatchers("/static/**", "/swagger-ui.html", "/v2/api-docs/**", "/swagger.json", "/swagger-resources/**", "/webjars/**", "/restLogin/**").permitAll()
+                .antMatchers("/images/**", "/swagger-ui.html", "/v2/api-docs/**", "/swagger.json", "/swagger-resources/**", "/webjars/**", "/restLogin/**").permitAll()
 
                 .antMatchers(HttpMethod.GET, "/restModel/**", "/brand/**", "/models/**", "/model/**", "/complect/**", "/modComp/**", "/registration")
                 .hasAnyRole("VIEWER", "CREATOR", "UPDATER", "ADMIN")

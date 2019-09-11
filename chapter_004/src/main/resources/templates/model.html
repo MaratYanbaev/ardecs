@@ -3,64 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Models</title>
-    <style>
-        .container {
-            width: inherit;
-            padding-right: 15px;
-            padding-left: 15px;
-            margin-right: auto;
-            margin-left: auto;
-            text-align: -moz-center;
-        }
-
-        .card {
-            position: relative;
-            background-color: #fff;
-            background-clip: border-box;
-            border: 1px solid rgba(0, 0, 0, .125);
-            border-radius: .25rem;
-            width: max-content;
-        }
-
-        .tools {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-        }
-
-        tr {
-            height: 40px;
-        }
-
-        img {
-            vertical-align: bottom;
-        }
-
-        span {
-            vertical-align: super;
-            font-size: larger;
-        }
-
-        td {
-            width: 150px;
-            vertical-align: middle;
-            text-align: center;
-        }
-
-    </style>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
 </head>
 <body>
-<div class="container">
-    <div class="card">
+<div class="containerInner">
+    <div class="cardInner">
         <div class="tools">
             <div>
                 <a th:href="@{/model/new/{brandId}(brandId=${brandId})}">
-                    <img src="http://localhost:63342/junior/chapter_004/static/images/add.png">
+                    <img th:src="@{/images/add.png}">
                 </a>
             </div>
             <div>
                 <a href="/brand/list">
-                    <img src="http://localhost:63342/junior/chapter_004/static/images/back.png">
+                    <img th:src="@{/images/back.png}">
                 </a>
             </div>
         </div>
@@ -72,20 +28,20 @@
                         <span>[[${model.name}]]</span>
                     </td>
                     <td>
-                        <img src="http://localhost:63342/junior/chapter_004/static/images/price.png">
+                        <img th:src="@{/images/price.png}">
                         <span>[[${model.price}]]</span>
                     </td>
                     <td>
                         <a type="image"
                            th:href="@{/modComp/{mId}/{bId}(mId=${model.id},bId=${brandId})}">
-                               <img src="http://localhost:63342/junior/chapter_004/static/images/view.png"/>
+                               <img th:src="@{/images/view.png}"/>
                         </a>
                     </td>
                     <td>
                         <form th:action="@{/model/renewed/{id}(id=${model.id})}"
                               th:method="get">
                             <input type="image"
-                                   src="http://localhost:63342/junior/chapter_004/static/images/fix.png"
+                                   th:src="@{/images/fix.png}"
                             />
                         </form>
                     </td>
@@ -93,7 +49,7 @@
                         <form th:action="@{/model/{id}(id=${model.id})}"
                               th:method="delete">
                             <input type="image"
-                                   src="http://localhost:63342/junior/chapter_004/static/images/delete.png">
+                                   th:src="@{/images/delete.png}">
                         </form>
                     </td>
                 </tr>
@@ -101,7 +57,6 @@
             </table>
         </div>
     </div>
-</div>
 </div>
 </body>
 </html>

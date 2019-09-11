@@ -1,6 +1,6 @@
-package com.ardecs.car_configurator.entities;
+package com.ardecs.entities.mainEntities;
 
-import com.ardecs.car_configurator.compositeId.ModelCompId;
+import com.ardecs.entities.compositeId.ModelCompId;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

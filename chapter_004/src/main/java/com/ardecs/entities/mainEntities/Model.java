@@ -1,4 +1,4 @@
-package com.ardecs.car_configurator.entities;
+package com.ardecs.entities.mainEntities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.annotations.ApiModel;

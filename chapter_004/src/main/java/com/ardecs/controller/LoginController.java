@@ -1,10 +1,9 @@
 package com.ardecs.controller;
 
-import com.ardecs.car_configurator.entityOfSecurity.Role;
-import com.ardecs.car_configurator.entityOfSecurity.User;
+import com.ardecs.entities.entityForSecurity.Role;
+import com.ardecs.entities.entityForSecurity.User;
 import com.ardecs.services.CustomUserDetailsService;
 import com.ardecs.services.RoleService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
@@ -24,7 +23,6 @@ import java.util.stream.Collectors;
  * @author Marat Yanbaev (yanbaevms@gmail.com)
  * @since 05.07.2019
  */
-@Slf4j
 @Controller
 @RequestMapping
 public class LoginController {

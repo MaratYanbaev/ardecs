@@ -1,6 +1,6 @@
 package com.ardecs.repositories;
 
-import com.ardecs.car_configurator.entityOfSecurity.User;
+import com.ardecs.entities.entityForSecurity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

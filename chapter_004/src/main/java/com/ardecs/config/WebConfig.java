@@ -1,4 +1,4 @@
-package com.ardecs;
+package com.ardecs.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

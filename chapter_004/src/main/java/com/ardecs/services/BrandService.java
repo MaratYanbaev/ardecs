@@ -1,6 +1,6 @@
 package com.ardecs.services;
 
-import com.ardecs.car_configurator.entities.Brand;
+import com.ardecs.entities.mainEntities.Brand;
 import com.ardecs.repositories.BrandRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

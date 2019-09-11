@@ -1,7 +1,6 @@
 package com.ardecs.services;
 
-import com.ardecs.car_configurator.entityOfSecurity.Role;
-import com.ardecs.car_configurator.entityOfSecurity.User;
+import com.ardecs.entities.entityForSecurity.User;
 import com.ardecs.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,9 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * @author Marat Yanbaev (yanbaevms@gmail.com)
@@ -46,12 +43,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(User user) {
-        List<String> list = new ArrayList<>();
-        for (Role role : user.getRoles()) {
-            String name = "ROLE_" + role.getName();
-            list.add(name);
-        }
-        String[] userRoles = list.toArray(new String[0]);
+        String[] userRoles = user.getRoles().stream().map(role -> "ROLE_" + role.getName()).toArray(String[]::new);
         return AuthorityUtils.createAuthorityList(userRoles);
     }
 }

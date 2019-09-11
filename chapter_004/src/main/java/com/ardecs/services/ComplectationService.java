@@ -1,6 +1,6 @@
 package com.ardecs.services;
 
-import com.ardecs.car_configurator.entities.Complectation;
+import com.ardecs.entities.mainEntities.Complectation;
 import com.ardecs.repositories.ComplectationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -20,10 +20,6 @@ public class ComplectationService {
 
     public List<Complectation> getCompByIdOfModel(Long id) {
         return complectationRepository.getCompByIdOfModel(id);
-    }
-
-    public List<Complectation> getCompByIdOfBrand(Long brandId) {
-        return complectationRepository.getCompByIdOfBrand(brandId);
     }
 
     public List<Complectation> getAllComplectation() {

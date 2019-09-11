@@ -1,6 +1,6 @@
 package com.ardecs.services;
 
-import com.ardecs.car_configurator.entities.EngineModCom;
+import com.ardecs.entities.mainEntities.EngineModCom;
 import com.ardecs.repositories.EngineModComRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

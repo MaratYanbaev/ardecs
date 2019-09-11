@@ -1,4 +1,4 @@
-package com.ardecs.car_configurator.compositeId;
+package com.ardecs.entities.compositeId;
 
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
@@ -7,29 +7,29 @@ import java.util.Objects;
 
 /**
  * @author Marat Yanbaev (yanbaevms@gmail.com)
- * @since 24.06.2019
+ * @since 23.06.2019
  */
 @Embeddable
-public class AccessoryModComId implements Serializable {
+public class EngineModComId implements Serializable {
 
-    private Long accessId;
+    private Long engineId;
     @EmbeddedId
     private ModelCompId modelCompId;
 
-    public AccessoryModComId(Long accessId, ModelCompId modelCompId) {
-        this.accessId = accessId;
+    public EngineModComId(Long engineId, ModelCompId modelCompId) {
+        this.engineId = engineId;
         this.modelCompId = modelCompId;
     }
 
-    public AccessoryModComId() {
+    public EngineModComId() {
     }
 
-    public Long getAccessId() {
-        return accessId;
+    public Long getEngineId() {
+        return engineId;
     }
 
-    public void setAccessId(Long accessId) {
-        this.accessId = accessId;
+    public void setEngineId(Long engineId) {
+        this.engineId = engineId;
     }
 
     public ModelCompId getModelCompId() {
@@ -44,13 +44,13 @@ public class AccessoryModComId implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AccessoryModComId that = (AccessoryModComId) o;
-        return Objects.equals(accessId, that.accessId) &&
+        EngineModComId that = (EngineModComId) o;
+        return Objects.equals(engineId, that.engineId) &&
                 Objects.equals(modelCompId, that.modelCompId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(accessId, modelCompId);
+        return Objects.hash(engineId, modelCompId);
     }
 }

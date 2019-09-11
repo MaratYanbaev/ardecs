@@ -1,6 +1,6 @@
 package com.ardecs.repositories;
 
-import com.ardecs.car_configurator.entities.Complectation;
+import com.ardecs.entities.mainEntities.Complectation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,17 +21,5 @@ public interface ComplectationRepository extends JpaRepository<Complectation, Lo
             nativeQuery = true)
     List<Complectation> getCompByIdOfModel(@Param("modelId") Long modelId);
 
-    @Query(value = "select c.name, c.id from complectation c\n" +
-            "inner JOIN model_complectation mc on c.id = mc.comp_id\n" +
-            "inner JOIN model m on mc.model_id = m.id\n" +
-            "where m.brand_id = :brandId\n" +
-            "group by c.name\n" +
-            "order by c.name",
-            nativeQuery = true)
-    List<Complectation> getCompByIdOfBrand(@Param("brandId") Long brandId);
-
-    @Query(value = "select id from complectation\n" +
-            "where name = :name",
-            nativeQuery = true)
-    Long findIdByNameOfComplect(@Param("name") String name);
+    Complectation findByName(String name);
 }

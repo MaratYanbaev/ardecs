@@ -1,0 +1,58 @@
+.containerInner {
+    width: inherit;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: -moz-center;
+}
+
+.container {
+     width: inherit;
+     padding-right: 15px;
+     padding-left: 15px;
+     margin-right: auto;
+     margin-left: auto;
+ }
+
+.cardInner {
+    position: relative;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: .25rem;
+    width: max-content;
+}
+
+.card {
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: .25rem;
+    width: max-content;
+}
+
+.tools {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+tr {
+    height: 40px;
+}
+
+img {
+    vertical-align: bottom;
+}
+
+span {
+    vertical-align: super;
+    font-size: larger;
+}
+
+td {
+    width: 150px;
+    vertical-align: middle;
+    text-align: center;
+}

@@ -1,4 +1,4 @@
-package com.ardecs.car_configurator.compositeId;
+package com.ardecs.entities.compositeId;
 
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;

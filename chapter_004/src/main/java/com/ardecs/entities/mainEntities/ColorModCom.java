@@ -1,6 +1,6 @@
-package com.ardecs.car_configurator.entities;
+package com.ardecs.entities.mainEntities;
 
-import com.ardecs.car_configurator.compositeId.AccessoryModComId;
+import com.ardecs.entities.compositeId.ColorModComId;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -14,18 +14,26 @@ import java.util.Objects;
  * @since 24.06.2019
  */
 @Entity
-@Table(name = "accessory_model_complect")
-public class AccessoryModCom {
+@Table(name = "color_model_complect")
+public class ColorModCom {
 
     @NotNull(message = "*Please provide price")
     @Max(value = 1_000_000, message = "*Max value 1_000_000")
     private Integer price;
     @JsonIgnore
-    private AccessoryModComId accessoryModComId;
-//    @JsonManagedReference
-    private Accessory accessory;
+    private ColorModComId colorModComId;
+    private Color color;
     @JsonBackReference
     private ModelComplectation modelComplectation;
+
+    @EmbeddedId
+    public ColorModComId getColorModComId() {
+        return colorModComId;
+    }
+
+    public void setColorModComId(ColorModComId colorModComId) {
+        this.colorModComId = colorModComId;
+    }
 
     @Column(name = "price")
     public Integer getPrice() {
@@ -36,24 +44,15 @@ public class AccessoryModCom {
         this.price = price;
     }
 
-    @EmbeddedId
-    public AccessoryModComId getAccessoryModComId() {
-        return accessoryModComId;
-    }
-
-    public void setAccessoryModComId(AccessoryModComId accessoryModComId) {
-        this.accessoryModComId = accessoryModComId;
-    }
-
     @ManyToOne
-    @MapsId(value = "accessId")
-    @JoinColumn(name = "access_id", referencedColumnName = "id")
-    public Accessory getAccessory() {
-        return accessory;
+    @MapsId(value = "colorId")
+    @JoinColumn(name = "color_id", referencedColumnName = "id")
+    public Color getColor() {
+        return color;
     }
 
-    public void setAccessory(Accessory accessory) {
-        this.accessory = accessory;
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     @ManyToOne
@@ -74,15 +73,15 @@ public class AccessoryModCom {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AccessoryModCom that = (AccessoryModCom) o;
-        return Objects.equals(price, that.price) &&
-                Objects.equals(accessoryModComId, that.accessoryModComId) &&
-                Objects.equals(accessory, that.accessory) &&
+        ColorModCom that = (ColorModCom) o;
+        return Objects.equals(colorModComId, that.colorModComId) &&
+                Objects.equals(price, that.price) &&
+                Objects.equals(color, that.color) &&
                 Objects.equals(modelComplectation, that.modelComplectation);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(price, accessoryModComId, accessory, modelComplectation);
+        return Objects.hash(colorModComId, price, color, modelComplectation);
     }
 }

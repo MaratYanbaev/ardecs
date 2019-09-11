@@ -1,4 +1,4 @@
-package com.ardecs;
+package com.ardecs.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

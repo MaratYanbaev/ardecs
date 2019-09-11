@@ -4,13 +4,13 @@
 
 <head>
     <title>Spring Security Tutorial</title>
-    <link rel="stylesheet" type="text/css" href="http://localhost:63342/junior/chapter_004/static/css/login.css"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 
 <body>
 <div class="container">
-    <img src="http://localhost:63342/junior/chapter_004/static/images/login.png"
+    <img th:src="@{/images/login.png}"
          class="img-responsive center-block" width="200" height="200" alt="Logo"/>
     <form th:action="@{/login}" method="POST" class="form-signin">
         <h3 class="form-signin-heading" th:text="Welcome"></h3>

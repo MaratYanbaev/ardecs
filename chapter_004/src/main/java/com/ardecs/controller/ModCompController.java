@@ -1,6 +1,6 @@
 package com.ardecs.controller;
 
-import com.ardecs.car_configurator.entities.*;
+import com.ardecs.entities.mainEntities.*;
 import com.ardecs.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -59,7 +59,7 @@ public class ModCompController {
 
     @GetMapping
     public String addComplect(Model model) {
-        addComplect(model, new com.ardecs.car_configurator.entities.Model());
+        addComplect(model, new com.ardecs.entities.mainEntities.Model());
         return "addComplect";
     }
 
@@ -71,7 +71,7 @@ public class ModCompController {
 
     @PostMapping
     public String addCompToModel(
-            @Valid com.ardecs.car_configurator.entities.Model myModel,
+            @Valid com.ardecs.entities.mainEntities.Model myModel,
             BindingResult bindingResult,
             Model model
     ) {
@@ -197,7 +197,7 @@ public class ModCompController {
         model.addAttribute("brandId", brandId);
     }
 
-    private void addComplect(Model model, com.ardecs.car_configurator.entities.Model myModel) {
+    private void addComplect(Model model, com.ardecs.entities.mainEntities.Model myModel) {
         List<Complectation> complectations = complectationService.getAllComplectation();
         model.addAttribute("complectations", complectations);
         model.addAttribute("model", myModel);

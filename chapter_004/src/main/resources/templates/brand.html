@@ -5,45 +5,7 @@
     <meta charset="UTF-8">
     <title>Producers</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <style>
-        .containerInner {
-            width: inherit;
-            padding-right: 15px;
-            padding-left: 15px;
-            margin-right: auto;
-            margin-left: auto;
-            text-align: -moz-center;
-        }
-
-        .cardInner {
-            position: relative;
-            background-color: #fff;
-            background-clip: border-box;
-            border: 1px solid rgba(0, 0, 0, .125);
-            border-radius: .25rem;
-            width: max-content;
-        }
-
-        tr {
-            height: 40px;
-        }
-
-        img {
-            vertical-align: bottom;
-        }
-
-        span {
-            vertical-align: super;
-            font-size: larger;
-        }
-
-        td {
-            width: 150px;
-            vertical-align: middle;
-            text-align: center;
-        }
-
-    </style>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
 </head>
 <body>
 
@@ -60,7 +22,7 @@
         <div style="width: 100%">
             <p>
                 <a href="new" class="second">
-                    <img src="http://localhost:63342/junior/chapter_004/static/images/add.png">
+                    <img th:src="@{/images/add.png}">
                 </a>
             </p>
             <div style="width: 100%">
@@ -72,7 +34,7 @@
                         </td>
                         <td>
                             <a th:href="@{/model/{id}(id=${brand.id})}">
-                                <img src="http://localhost:63342/junior/chapter_004/static/images/view.png">
+                                <img th:src="@{/images/view.png}">
                             </a>
                         </td>
                         <td>
@@ -80,7 +42,7 @@
                                   th:method="get">
                                 <input type="image"
                                        class="second"
-                                       src="http://localhost:63342/junior/chapter_004/static/images/fix.png"
+                                       th:src="@{/images/fix.png}"
                                 />
                             </form>
                         </td>
@@ -89,7 +51,7 @@
                                   th:method="delete">
                                 <input type="image"
                                        class="second"
-                                       src="http://localhost:63342/junior/chapter_004/static/images/delete.png"
+                                       th:src="@{/images/delete.png}"
                                 />
                             </form>
                         </td>

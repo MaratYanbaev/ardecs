@@ -1,6 +1,6 @@
-package com.ardecs.car_configurator.entities;
+package com.ardecs.entities.mainEntities;
 
-import com.ardecs.car_configurator.compositeId.EngineModComId;
+import com.ardecs.entities.compositeId.AccessoryModComId;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -11,29 +11,21 @@ import java.util.Objects;
 
 /**
  * @author Marat Yanbaev (yanbaevms@gmail.com)
- * @since 23.06.2019
+ * @since 24.06.2019
  */
 @Entity
-@Table(name = "engine_model_complect")
-public class EngineModCom {
+@Table(name = "accessory_model_complect")
+public class AccessoryModCom {
 
     @NotNull(message = "*Please provide price")
     @Max(value = 1_000_000, message = "*Max value 1_000_000")
     private Integer price;
     @JsonIgnore
-    private EngineModComId engineModComId;
-    private Engine engine;
+    private AccessoryModComId accessoryModComId;
+//    @JsonManagedReference
+    private Accessory accessory;
     @JsonBackReference
     private ModelComplectation modelComplectation;
-
-    @EmbeddedId
-    public EngineModComId getEngineModComId() {
-        return engineModComId;
-    }
-
-    public void setEngineModComId(EngineModComId engineModComId) {
-        this.engineModComId = engineModComId;
-    }
 
     @Column(name = "price")
     public Integer getPrice() {
@@ -44,22 +36,31 @@ public class EngineModCom {
         this.price = price;
     }
 
-    @ManyToOne
-    @MapsId(value = "engineId")
-    @JoinColumn(name = "engine_id", referencedColumnName = "id")
-    public Engine getEngine() {
-        return engine;
+    @EmbeddedId
+    public AccessoryModComId getAccessoryModComId() {
+        return accessoryModComId;
     }
 
-    public void setEngine(Engine engine) {
-        this.engine = engine;
+    public void setAccessoryModComId(AccessoryModComId accessoryModComId) {
+        this.accessoryModComId = accessoryModComId;
+    }
+
+    @ManyToOne
+    @MapsId(value = "accessId")
+    @JoinColumn(name = "access_id", referencedColumnName = "id")
+    public Accessory getAccessory() {
+        return accessory;
+    }
+
+    public void setAccessory(Accessory accessory) {
+        this.accessory = accessory;
     }
 
     @ManyToOne
     @MapsId(value = "modelCompId")
     @JoinColumns({
-            @JoinColumn(name = "comp_id", referencedColumnName = "comp_id"),
-            @JoinColumn(name = "model_id", referencedColumnName = "model_id")
+            @JoinColumn(name = "model_id", referencedColumnName = "model_id"),
+            @JoinColumn(name = "comp_id", referencedColumnName = "comp_id")
     })
     public ModelComplectation getModelComplectation() {
         return modelComplectation;
@@ -73,15 +74,15 @@ public class EngineModCom {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        EngineModCom that = (EngineModCom) o;
-        return Objects.equals(engineModComId, that.engineModComId) &&
-                Objects.equals(price, that.price) &&
-                Objects.equals(engine, that.engine) &&
+        AccessoryModCom that = (AccessoryModCom) o;
+        return Objects.equals(price, that.price) &&
+                Objects.equals(accessoryModComId, that.accessoryModComId) &&
+                Objects.equals(accessory, that.accessory) &&
                 Objects.equals(modelComplectation, that.modelComplectation);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(engineModComId, price, engine, modelComplectation);
+        return Objects.hash(price, accessoryModComId, accessory, modelComplectation);
     }
 }
