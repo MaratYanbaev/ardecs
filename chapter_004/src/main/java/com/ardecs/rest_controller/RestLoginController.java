@@ -78,25 +78,6 @@ public class RestLoginController {
             e.printStackTrace();
         }
 
-//        List<Role> userRoles = user.getRoles();
-//        if (userRoles != null) {
-//            int i = userRoles.size();
-//            List<Role> roles = roleService.getRoles();
-//            for (Role checkedValue : userRoles) {
-//                for (Role value : roles) {
-//                    if (checkedValue.getName().equals(value.getName())) {
-//                        i--;
-//                        break;
-//                    }
-//                }
-//            }
-//            if (i != 0) {
-//                bindingResult
-//                        .rejectValue("roles", "error.user",
-//                                "Provided name/s of Role doesn't match to one of next: ADMIN; CREATOR; UPDATER; VIEWER.");
-//            }
-//        }
-
         if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
             String errors = fieldErrors.stream()

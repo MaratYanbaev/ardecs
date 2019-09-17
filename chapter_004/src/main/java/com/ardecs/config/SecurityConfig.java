@@ -56,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.csrf().disable().authorizeRequests()
-                .antMatchers("/images/**", "/swagger-ui.html", "/v2/api-docs/**", "/swagger.json", "/swagger-resources/**", "/webjars/**", "/restLogin/**").permitAll()
+                .antMatchers("/images/**", "/css/**", "/swagger-ui.html", "/v2/api-docs/**", "/swagger.json", "/swagger-resources/**", "/webjars/**", "/restLogin/**").permitAll()
 
                 .antMatchers(HttpMethod.GET, "/restModel/**", "/brand/**", "/models/**", "/model/**", "/complect/**", "/modComp/**", "/registration")
                 .hasAnyRole("VIEWER", "CREATOR", "UPDATER", "ADMIN")
